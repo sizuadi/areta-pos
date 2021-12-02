@@ -12,7 +12,7 @@ export const MenuData = [
       },
       {
         title: "Kategori Barang",
-        url: "/",
+        url: "/kategori-barang",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",

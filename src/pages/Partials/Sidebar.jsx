@@ -16,9 +16,9 @@ export default function Sidebar() {
       data-kt-drawer-toggle='#kt_aside_mobile_toggle'
     >
       <div className='aside-logo flex-column-auto' id='kt_aside_logo'>
-        <a href='../../demo1/dist/index.html'>
+        <Link to='/'>
           <img alt='Logo' src='assets/media/logos/logo-1-dark.svg' className='h-25px logo' />
-        </a>
+        </Link>
         <div
           id='kt_aside_toggle'
           className='btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle'
@@ -65,7 +65,7 @@ export default function Sidebar() {
             data-kt-menu='true'
           >
             <div className='menu-item pb-8'>
-              <a className='menu-link active' href='../../demo1/dist/index.html'>
+              <Link className='menu-link active' to='/'>
                 <span className='menu-icon'>
                   <span className='svg-icon svg-icon-2'>
                     <svg
@@ -83,7 +83,7 @@ export default function Sidebar() {
                   </span>
                 </span>
                 <span className='menu-title'>Dashboard</span>
-              </a>
+              </Link>
             </div>
             {MenuData.map((menu, index) => {
               return (
