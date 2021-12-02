@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import { MenuData } from '../../routes/MenuData'
 import api from '../../utilities/api'
 import { Logout } from '../../utilities/Auth'
+import UserDetail from './UserDetail'
 
-export default function Navbar() {
+export default function Navbar({children, ...props}) {
   return (
     <div id='kt_header' style={{}} className='header align-items-stretch'>
       <div className='container-fluid d-flex align-items-stretch justify-content-between'>
@@ -1926,15 +1927,7 @@ export default function Navbar() {
                         <img alt='Logo' src='assets/media/avatars/150-26.jpg' />
                       </div>
                       <div className='d-flex flex-column'>
-                        <div className='fw-bolder d-flex align-items-center fs-5'>
-                          Max Smith
-                          <span className='badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2'>
-                            Pro
-                          </span>
-                        </div>
-                        <a href='/' className='fw-bold text-muted text-hover-primary fs-7'>
-                          max@kt.com
-                        </a>
+                        <UserDetail {...props} />
                       </div>
                     </div>
                   </div>

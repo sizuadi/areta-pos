@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import api from '../../utilities/api';
-import Navbar from '../Partials/Navbar';
-import Sidebar from '../Partials/Sidebar';
+import React, { useContext, useEffect } from 'react'
+import {UserContext} from '../../context/UserContext'
+import api from '../../utilities/api'
+import Navbar from '../Partials/Navbar'
+import Sidebar from '../Partials/Sidebar'
 
-export default function Admin({ component, ...rest }) {
-  const [data, setData] = useState('');
+export default function Admin({ component, ...props }) {
+  const user = useContext(UserContext);
 
   useEffect(() => {
-    api().get('/api/user').then(response => setData(response.data.name));
-  }, [data]);
-    
+    api()
+      .get('/api/user')
+      .then((response) => {
+        user.setUsername(response.data.name);
+        user.setEmail(response.data.email);
+      })
+  }, [user]);
+
   return (
     <div
       id='kt_body'
@@ -19,7 +25,7 @@ export default function Admin({ component, ...rest }) {
         <div className='page d-flex flex-row flex-column-fluid'>
           <Sidebar />
           <div className='wrapper d-flex flex-column flex-row-fluid' id='kt_wrapper'>
-            <Navbar />
+            <Navbar {...props} />
             <div className='content mt-10 d-flex flex-column flex-column-fluid' id='kt_content'>
               {component}
             </div>
