@@ -1,24 +1,54 @@
-import React from "react"
-import { Navigate } from "react-router"
+import React, { useState } from "react";
+import api from "../../utilities/api";
+import { Login } from "../../utilities/Auth";
+import { buttonStateComplete, buttonStateLoading } from "../../utilities/button.spinner";
 
-export default function Auth({authHandler, isAuthenticated}) {
-  const handleForm = () => {
-    let button = document.querySelector('#kt_sign_in_submit');
-    let spinner = document.createElement('span');
-    spinner.classList.add("spinner-border");
-    spinner.classList.add("spinner-border-sm");
-    button.classList.add('disabled');
-    button.removeChild(button.childNodes[0]);
-    button.appendChild(spinner);
-    
-    setTimeout(() => {
-      authHandler();
-    }, 2000);
+const LoginPage = () => {
+  const [formInput, setFormInput] = useState({email: '', password: ''})
+  const Toast = window['Swal'].mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', window['Swal'].stopTimer)
+      toast.addEventListener('mouseleave', window['Swal'].resumeTimer)
+    }
+  })
+
+  const updateFormInput = e => {
+    e.persist();
+
+    setFormInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
+  }
+
+  const signIn = e => {
+    e.preventDefault();
+
+    buttonStateLoading('#kt_sign_in_submit');
+
+    api().get('/sanctum/csrf-cookie').then(() => {
+      api().post('/login', formInput).then(() => {
+        Login();
+      }).catch(errors => {
+        buttonStateComplete('#kt_sign_in_submit', 'Login');
+        if (errors.response.status === 422) {          
+          Toast.fire({
+            icon: 'error',
+            title: errors.response.data.errors[Object.keys(errors.response.data.errors)[0]],
+          });
+        } else {
+          Toast.fire({
+            icon: 'error',
+            title: errors.response.data.message,
+          });
+        }
+      })
+    })
   }
   
-  return isAuthenticated ? (
-    <Navigate from="/login" to="/" />
-  ) : (
+  return (
     <div className="d-flex flex-column flex-root align-items-center min-vh-100">
       <div className="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed">
         <div className="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
@@ -36,8 +66,7 @@ export default function Auth({authHandler, isAuthenticated}) {
                   className="form-control form-control-lg form-control-solid"
                   type="text"
                   name="email"
-                  autoComplete="off"
-                  required={true}
+                  onChange={updateFormInput}
                 />
               </div>
               <div className="fv-row mb-10">
@@ -49,14 +78,15 @@ export default function Auth({authHandler, isAuthenticated}) {
                   type="password"
                   name="password"
                   autoComplete="off"
+                  onChange={updateFormInput}
                 />
               </div>
               <div className="text-center">
                 <button
-                  type="button"
+                  type="submit"
                   id="kt_sign_in_submit"
                   className="btn btn-lg btn-primary w-100 mb-5"
-                  onClick={handleForm}
+                  onClick={signIn}
                 >
                   Login
                 </button>
@@ -68,3 +98,5 @@ export default function Auth({authHandler, isAuthenticated}) {
     </div>
   )
 }
+
+export default LoginPage

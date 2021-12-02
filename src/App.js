@@ -1,29 +1,17 @@
-import Auth from "./pages/Auth/Login";
+import LoginPage from "./pages/Auth/LoginPage";
 import Home from "./pages/Home/Home";
-import { useState } from "react";
 import {
   BrowserRouter,
   Routes,
-  Route,
-  Navigate
+  Route
 } from "react-router-dom";
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState({});
-
-  const handleAuth = () => {
-    setIsAuthenticated(!isAuthenticated);
-    setUser({
-      username: "Benny Rahmat",
-    });
-  };
-  
+function App() { 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/login' element={<Auth authHandler={handleAuth} isAuthenticated={isAuthenticated} />} />
-        <Route path='/' element={!isAuthenticated ? <Navigate from="/" to="/login" /> : <Home authHandler={handleAuth} authenticatedUser={user} />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/' element={<Home />} />
       </Routes>
     </BrowserRouter>
   )
