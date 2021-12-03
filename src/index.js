@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Sanctum } from 'react-sanctum';
+
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 import App from './App';
 import { sanctumConfig } from './Config/sanctumConfig';
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(

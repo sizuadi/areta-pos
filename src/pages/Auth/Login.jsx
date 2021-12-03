@@ -70,6 +70,7 @@ const Login = () => {
                   type="text"
                   name="email"
                   onChange={updateFormInput}
+                  autoFocus={true}
                 />
               </div>
               <div className="fv-row mb-10">

@@ -1,6 +1,8 @@
-import React from 'react'
+import React from 'react';
 import {Link} from 'react-router-dom'
 import { useSanctum } from 'react-sanctum';
+import CustomLink from '../../Components/PageComponent/CustomLink';
+
 import { menuData } from '../../Routes/menuData'
 
 export default function Sidebar() {
@@ -83,16 +85,10 @@ export default function Sidebar() {
             data-kt-menu='true'
           >
             <div className='menu-item pb-8'>
-              <Link className='menu-link active' to='/'>
+              <CustomLink className={`menu-link`} to='/'>
                 <span className='menu-icon'>
                   <span className='svg-icon svg-icon-2'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width={24}
-                      height={24}
-                      viewBox='0 0 24 24'
-                      fill='none'
-                    >
+                    <svg xmlns='http://www.w3.org/2000/svg' width={24} height={24} viewBox='0 0 24 24' fill='none' >
                       <rect x={2} y={2} width={9} height={9} rx={2} fill='black' />
                       <rect opacity='0.3' x={13} y={2} width={9} height={9} rx={2} fill='black' />
                       <rect opacity='0.3' x={13} y={13} width={9} height={9} rx={2} fill='black' />
@@ -101,7 +97,7 @@ export default function Sidebar() {
                   </span>
                 </span>
                 <span className='menu-title'>Dashboard</span>
-              </Link>
+              </CustomLink>
             </div>
             {menuData.map((menu, index) => {
               return (
@@ -115,17 +111,14 @@ export default function Sidebar() {
                     {menu.subMenu.map((subMenu, subIndex) => {
                       return (
                         <div className='menu-item' key={subIndex}>
-                          <Link
-                            to={subMenu.url}
-                            className={'menu-link ' + subMenu.sideBarLinkClass}
-                          >
+                          <CustomLink to={subMenu.url} className={`menu-link ${subMenu.sideBarLinkClass}`} >
                             <span className='menu-bullet'>
                               <span className='bullet bullet-dot' />
                             </span>
-                            <span className={'menu-title ' + subMenu.sideBarTitleClass}>
+                            <span className={`menu-title ${subMenu.sideBarTitleClass}`}>
                               {subMenu.title}
                             </span>
-                          </Link>
+                          </CustomLink>
                         </div>
                       )
                     })}

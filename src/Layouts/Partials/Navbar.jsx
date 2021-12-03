@@ -1,7 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+
 import { menuData } from '../../Routes/menuData'
 import UserMenu from '../../Components/PageComponent/UserMenu'
+import CustomLink from '../../Components/PageComponent/CustomLink'
 
 export default function Navbar() {
   return (
@@ -59,9 +60,9 @@ export default function Navbar() {
                 data-kt-menu='true'
               >
                 <div className='menu-item me-lg-1'>
-                  <a className='menu-link active py-3' href='/'>
+                  <CustomLink className='menu-link py-3' to='/'>
                     <span className='menu-title'>Dashboard</span>
-                  </a>
+                  </CustomLink>
                 </div>
                 {menuData.map((menu, index) => {
                   return (
@@ -79,7 +80,7 @@ export default function Navbar() {
                         {menu.subMenu.map((subMenu, subIndex) => {
                           return (
                             <div className='menu-item' key={subIndex}>
-                              <Link
+                              <CustomLink
                                 to={subMenu.url}
                                 className={'menu-link py-3 ' + subMenu.linkClass}
                               >
@@ -89,7 +90,7 @@ export default function Navbar() {
                                 <span className={'menu-title ' + subMenu.titleClass}>
                                   {subMenu.title}
                                 </span>
-                              </Link>
+                              </CustomLink>
                             </div>
                           )
                         })}

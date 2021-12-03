@@ -7,7 +7,7 @@ const UserDetail = () => {
   return (
     <div>
       <div className='fw-bolder d-flex align-items-center fs-5'>{user.name}</div>
-      <a href='/' className='fw-bold text-muted text-hover-primary fs-7' onClick={e => e.preventDefault()}>
+      <a href='/me' className='fw-bold text-muted text-hover-primary fs-7'>
         {user.email}
       </a>
     </div>

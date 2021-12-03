@@ -25,7 +25,7 @@ export default function Dashboard() {
         </div>
       </div>
       <div
-        className="post d-flex flex-column-fluid mt-20 min-vh-100"
+        className="post d-flex flex-column-fluid"
         id="kt_post"
       >
         <div id="kt_content_container" className="container-xxl">

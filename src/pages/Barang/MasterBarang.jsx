@@ -1,6 +1,118 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useEffect } from 'react';
+import { useSanctum } from 'react-sanctum';
+
+import TableLoader from '../../Components/PageComponent/TableLoader';
+import api from '../../Util/api'
+import { rupiah } from '../../Util/commonHelpers';
 
 export default function MasterBarang() {
+  const [paginated, setPaginated] = useState({
+    current_page: 0,
+    data: [],
+    first_page_url: "",
+    from: 0,
+    last_page: 0,
+    last_page_url: "",
+    links: [],
+    next_page_url: "",
+    path: "",
+    per_page: 0,
+    prev_page_url: "",
+    to: 0,
+    total: 0,
+  });
+
+  const {signOut} = useSanctum()
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    api().get(`/api/products?page=${currentPage}`).then(response => {
+      setPaginated(response.data);
+      setIsLoading(false);
+    }).catch(err => {
+      if (err.response.status === 401) {
+        signOut();
+      }
+    });
+  }, [currentPage, signOut]);
+
+  const nextHandler = e => {
+    e.preventDefault();
+    setIsLoading(true);
+    setCurrentPage(currentPage + 1);
+  }
+
+  const prevHandler = e => {
+    e.preventDefault();
+    setIsLoading(true);
+    setCurrentPage(currentPage - 1);
+  }
+
+  const goToHandler = (e, page) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setCurrentPage(page);
+  }
+
+  let clonedPagination = !isLoading && paginated.links.slice();
+  !isLoading && clonedPagination.shift();
+  !isLoading && clonedPagination.pop();
+  
+  let pagination = !isLoading && clonedPagination.map((item, index) => {
+    return (
+      <div key={index}>
+        <li className={`page-item ${item.active && 'active'} m-1`}><a href={item.url} className="page-link" onClick={(e) => goToHandler(e, parseInt(item.label))}>{item.label}</a></li>
+      </div>
+    )
+  })
+
+  let firstPage = !isLoading && (
+    <div>
+      <li className={`page-item previous m-1 ${!paginated.prev_page_url ? 'disabled' : null}`}><a href={!paginated.prev_page_url ? '/#' : paginated.prev_page_url} className="page-link" onClick={(e) => prevHandler(e)}><i className="previous"></i></a></li>
+    </div>
+  );
+
+  let lastPage = !isLoading && (
+    <div>
+      <li className={`page-item previous m-1 ${!paginated.next_page_url ? 'disabled' : null}`}><a href={!paginated.next_page_url ? '/#' : paginated.next_page_url} className="page-link" onClick={(e) => nextHandler(e)}><i className="next"></i></a></li>
+    </div>
+  );
+
+  let loader = <TableLoader colSpan={4} />
+
+  let products = paginated.data?.map((item, index) => {
+    return (
+      <tr key={index}>
+        <td>
+          <div className="d-flex align-items-center">
+            <div className="symbol symbol-50px me-5">
+              <img src={"assets/media/products/box.png"} className="h-75 align-self-end" alt="product" />
+            </div>
+            <div className="d-flex justify-content-start flex-column">
+              <span className="text-dark fw-bolder text-hover-primary cursor-pointer mb-1 fs-6">{item.name}</span>
+              <span className="text-muted fw-bold text-muted d-block fs-7">{item.category.name}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{rupiah(item.price)}</span>
+        </td>
+        <td>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6 text-truncate" style={{maxWidth: '300px'}}>
+            {item.description}
+          </span>
+        </td>
+        <td className="text-end">
+          <a href="/" className="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4 me-2">View</a>
+          <a href="/" className="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4">Edit</a>
+        </td>
+      </tr>
+    )
+  })
+  
+
   return (
     <div>
       <div className='toolbar' id='kt_toolbar'>
@@ -17,30 +129,43 @@ export default function MasterBarang() {
           </div>
         </div>
       </div>
-      <div className='post d-flex flex-column-fluid mt-20' id='kt_post'>
+      <div className='post d-flex flex-column-fluid' id='kt_post'>
         <div id='kt_content_container' className='container-xxl'>
-          <div className='card'>
-            <div className='card-body pb-0'>
-              <div className='card-px text-center pt-20 pb-5'>
-                <h2 className='fs-2x fw-bolder mb-0'>Master Barang</h2>
-                <p className='text-gray-400 fs-4 fw-bold py-7'>
-                  This is example page.
-                  <br />
-                  to fill the layout.
-                </p>
-                <button
-                  className='btn btn-primary er fs-6 px-8 py-4'
-                >
-                  Tambah Barang
+          <div className="card mb-5 mb-xl-8">
+            <div className="card-header border-0 pt-5">
+              <h3 className="card-title align-items-start flex-column">
+                <span className="card-label fw-bolder fs-3 mb-1">Daftar Barang</span>
+                <span className="text-muted mt-1 fw-bold fs-7">Semua barang inventory</span>
+              </h3>
+              <div className="card-toolbar">
+                <button type="button" className="btn btn-primary">
+                  Tambah
                 </button>
               </div>
-              <div className='text-center px-5'>
-                <img
-                  src='/assets/media/illustrations/sketchy-1/2.png'
-                  alt="sample"
-                  className='mw-100 h-200px h-sm-325px'
-                />
+            </div>
+            <div className="card-body py-3">
+              <div className="table-responsive">
+                <table className="table align-middle gs-0 gy-4">
+                  <thead>
+                    <tr className="fw-bolder text-muted bg-light">
+                      <th className="ps-4 min-w-300px rounded-start">Nama Produk</th>
+                      <th className="min-w-125px">Harga</th>
+                      <th className="min-w-200px">Deskripsi</th>
+                      <th className="min-w-200px text-end rounded-end"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {isLoading ? loader : products}
+                  </tbody>
+                </table>
               </div>
+              <nav aria-label="Page navigation example">
+                <ul className="pagination pagination-outline justify-content-end">
+                  {!isLoading && firstPage}
+                  {!isLoading && pagination}
+                  {!isLoading && lastPage}
+                </ul>
+              </nav>
             </div>
           </div>
         </div>

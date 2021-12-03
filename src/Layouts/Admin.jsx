@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+
 import { initApp } from "../Util/themeInit";
 import ContentWrapper from "./Partials/ContentWrapper";
 import Footer from "./Partials/Footer";
@@ -11,7 +12,7 @@ export default function Admin({ component }) {
   });
     
   return (
-    <div id="kt_body" className="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed">
+    <div id="kt_body" className="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed toolbar-tablet-and-mobile-fixed aside-enabled aside-fixed">
       <div className="d-flex flex-column flex-root">
         <div className="page d-flex flex-row flex-column-fluid">
           <Sidebar />
