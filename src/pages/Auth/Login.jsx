@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import api from "../../utilities/api";
-import { Login } from "../../utilities/Auth";
-import { buttonStateComplete, buttonStateLoading } from "../../utilities/button.spinner";
+import { useNavigate } from "react-router-dom";
+import { useSanctum } from "react-sanctum";
+import { buttonStateComplete, buttonStateLoading } from "../../Components/button.state";
 
-const LoginPage = () => {
-  const [formInput, setFormInput] = useState({email: '', password: ''})
+const Login = () => {
+  const { signIn } = useSanctum();
+  const [ formInput, setFormInput ] = useState({email: '', password: ''})
+  const redirect = useNavigate();
+
   const Toast = window['Swal'].mixin({
     toast: true,
     position: 'top-end',
@@ -23,28 +26,28 @@ const LoginPage = () => {
     setFormInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   }
 
-  const signIn = e => {
+  const handleSignIn = e => {
     e.preventDefault();
 
     buttonStateLoading('#kt_sign_in_submit');
 
-    api().get('/sanctum/csrf-cookie').then(() => {
-      api().post('/login', formInput).then(() => {
-        Login();
-      }).catch(errors => {
+    signIn(formInput.email, formInput.password).then(() => {
+      buttonStateComplete('#kt_sign_in_submit', 'Login');
+      redirect('/', { replace: true });
+    }).catch(err => {
+      if (err.response.status === 422) {          
         buttonStateComplete('#kt_sign_in_submit', 'Login');
-        if (errors.response.status === 422) {          
-          Toast.fire({
-            icon: 'error',
-            title: errors.response.data.errors[Object.keys(errors.response.data.errors)[0]],
-          });
-        } else {
-          Toast.fire({
-            icon: 'error',
-            title: errors.response.data.message,
-          });
-        }
-      })
+        Toast.fire({
+          icon: 'error',
+          title: err.response.data.errors[Object.keys(err.response.data.errors)[0]],
+        });
+      } else {
+        buttonStateComplete('#kt_sign_in_submit', 'Login');
+        Toast.fire({
+          icon: 'error',
+          title: err.response.data.message,
+        });
+      }
     })
   }
   
@@ -86,7 +89,7 @@ const LoginPage = () => {
                   type="submit"
                   id="kt_sign_in_submit"
                   className="btn btn-lg btn-primary w-100 mb-5"
-                  onClick={signIn}
+                  onClick={handleSignIn}
                 >
                   Login
                 </button>
@@ -99,4 +102,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default Login

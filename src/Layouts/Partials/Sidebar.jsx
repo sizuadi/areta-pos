@@ -1,8 +1,26 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {MenuData} from '../../routes/MenuData'
+import { useSanctum } from 'react-sanctum';
+import { menuData } from '../../Routes/menuData'
 
 export default function Sidebar() {
+  const { signOut } = useSanctum();
+
+  const logoutConfirmation = () => window['Swal'].fire({
+    title: "Apakah anda yakin?",
+    text: "Keluar dari aplikasi!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Logout",
+    cancelButtonText: "Batal",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      signOut();
+    }
+  });
+    
   return (
     <div
       id='kt_aside'
@@ -85,35 +103,11 @@ export default function Sidebar() {
                 <span className='menu-title'>Dashboard</span>
               </Link>
             </div>
-            {MenuData.map((menu, index) => {
+            {menuData.map((menu, index) => {
               return (
                 <div data-kt-menu-trigger='click' className='menu-item menu-accordion' key={index}>
                   <span className='menu-link'>
-                    <span className='menu-icon'>
-                      <span className='svg-icon svg-icon-2'>
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          width={24}
-                          height={24}
-                          viewBox='0 0 24 24'
-                          fill='none'
-                        >
-                          <path
-                            d='M21 9V11C21 11.6 20.6 12 20 12H14V8H20C20.6 8 21 8.4 21 9ZM10 8H4C3.4 8 3 8.4 3 9V11C3 11.6 3.4 12 4 12H10V8Z'
-                            fill='black'
-                          />
-                          <path
-                            d='M15 2C13.3 2 12 3.3 12 5V8H15C16.7 8 18 6.7 18 5C18 3.3 16.7 2 15 2Z'
-                            fill='black'
-                          />
-                          <path
-                            opacity='0.3'
-                            d='M9 2C10.7 2 12 3.3 12 5V8H9C7.3 8 6 6.7 6 5C6 3.3 7.3 2 9 2ZM4 12V21C4 21.6 4.4 22 5 22H10V12H4ZM20 12V21C20 21.6 19.6 22 19 22H14V12H20Z'
-                            fill='black'
-                          />
-                        </svg>
-                      </span>
-                    </span>
+                    {menu.icon}
                     <span className='menu-title'>{menu.title}</span>
                     <span className='menu-arrow' />
                   </span>
@@ -142,6 +136,20 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
+      <div className="aside-footer flex-column-auto pt-5 pb-7 px-5" id="kt_aside_footer">
+        <a href="/" className="btn btn-custom btn-primary w-100" onClick={(e) => {
+            e.preventDefault();
+            logoutConfirmation();
+        }}>
+            <span className="btn-label">Logout</span>
+            <span className="svg-icon btn-icon svg-icon-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path opacity="0.3" d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM15 17C15 16.4 14.6 16 14 16H8C7.4 16 7 16.4 7 17C7 17.6 7.4 18 8 18H14C14.6 18 15 17.6 15 17ZM17 12C17 11.4 16.6 11 16 11H8C7.4 11 7 11.4 7 12C7 12.6 7.4 13 8 13H16C16.6 13 17 12.6 17 12ZM17 7C17 6.4 16.6 6 16 6H8C7.4 6 7 6.4 7 7C7 7.6 7.4 8 8 8H16C16.6 8 17 7.6 17 7Z" fill="black"></path>
+                    <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="black"></path>
+                </svg>
+            </span>
+        </a>
+    </div>
     </div>
   )
 }

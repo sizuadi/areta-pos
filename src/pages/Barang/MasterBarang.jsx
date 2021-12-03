@@ -13,7 +13,7 @@ export default function MasterBarang() {
           >
             <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Master Barang</h1>
             <span className='h-20px border-gray-200 border-start ms-3 mx-2' />
-            <small className='text-muted fs-7 fw-bold my-1 ms-1'>#XRS-45670</small>
+            <small className='text-muted fs-7 fw-bold my-1 ms-1'>List Page</small>
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@ export default function MasterBarang() {
                 <button
                   className='btn btn-primary er fs-6 px-8 py-4'
                 >
-                  View Users
+                  Tambah Barang
                 </button>
               </div>
               <div className='text-center px-5'>

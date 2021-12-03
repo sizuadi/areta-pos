@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Sanctum } from 'react-sanctum';
 import App from './App';
-import { UserProvider } from './context/UserContext';
+import { sanctumConfig } from './Config/sanctumConfig';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserProvider>
+    <Sanctum config={sanctumConfig}>
       <App />
-    </UserProvider>
+    </Sanctum>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function

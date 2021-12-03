@@ -1,23 +1,37 @@
-import LoginPage from './pages/Auth/LoginPage'
-import Dashboard from './pages/Home/Dashboard'
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import Admin from './pages/Layouts/Admin'
-import MasterBarang from './pages/Barang/MasterBarang'
-import NotFound from './pages/Errors/NotFound'
-import React, { useContext } from 'react'
-import { UserContext } from './context/UserContext'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useSanctum } from "react-sanctum";
+import Admin from "./Layouts/Admin";
+import Login from "./Pages/Auth/Login";
+import MasterBarang from "./Pages/Barang/MasterBarang";
+import NotFound from "./Pages/Errors/NotFound";
+import Dashboard from "./Pages/Home/Dashboard";
+import { authorized, guest } from "./Util/authHelper";
 
-export default function App() {  
-  const user = useContext(UserContext);
-  
+function App() {
+  const { authenticated } = useSanctum();
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/' element={<Admin userdata={user} component={<Dashboard />} />} />
-        <Route path='/master-barang' element={<Admin userdata={user} component={<MasterBarang />} />} />
-        <Route path='*' element={<NotFound />} />
+        <Route path="/login" element={guest(<Login />, authenticated)} />
+        <Route
+          path="/"
+          element={authorized(
+            <Admin component={<Dashboard />} />,
+            authenticated
+          )}
+        />
+        <Route
+          path="/master-barang"
+          element={authorized(
+            <Admin component={<MasterBarang />} />,
+            authenticated
+          )}
+        />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
+
+export default App;
