@@ -63,20 +63,20 @@ export default function MasterBarang() {
   let pagination = !isLoading && clonedPagination.map((item, index) => {
     return (
       <div key={index}>
-        <li className={`page-item ${item.active && 'active'} m-1`}><a href={item.url} className="page-link" onClick={(e) => goToHandler(e, parseInt(item.label))}>{item.label}</a></li>
+        <li className={`page-item ${item.active && 'active'} m-1`}><span className="page-link cursor-pointer" onClick={(e) => goToHandler(e, parseInt(item.label))}>{item.label}</span></li>
       </div>
     )
   })
 
   let firstPage = !isLoading && (
     <div>
-      <li className={`page-item previous m-1 ${!paginated.prev_page_url ? 'disabled' : null}`}><a href={!paginated.prev_page_url ? '/#' : paginated.prev_page_url} className="page-link" onClick={(e) => prevHandler(e)}><i className="previous"></i></a></li>
+      <li className={`page-item previous m-1 ${!paginated.prev_page_url ? 'disabled' : null}`}><span className="page-link cursor-pointer" onClick={(e) => prevHandler(e)}><i className="previous"></i></span></li>
     </div>
   );
 
   let lastPage = !isLoading && (
     <div>
-      <li className={`page-item previous m-1 ${!paginated.next_page_url ? 'disabled' : null}`}><a href={!paginated.next_page_url ? '/#' : paginated.next_page_url} className="page-link" onClick={(e) => nextHandler(e)}><i className="next"></i></a></li>
+      <li className={`page-item previous m-1 ${!paginated.next_page_url ? 'disabled' : null}`}><span className="page-link cursor-pointer" onClick={(e) => nextHandler(e)}><i className="next"></i></span></li>
     </div>
   );
 
