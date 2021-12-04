@@ -6,6 +6,8 @@ import Login from "./Views/Auth/Login";
 import MasterBarang from "./Views/Barang/MasterBarang";
 import NotFound from "./Views/Errors/NotFound";
 import Dashboard from "./Views/Home/Dashboard";
+import Blank from "./Views/Blank";
+
 import { authorized, guest } from "./Util/authHelper";
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
         <Route path="/" element={authorized(<Admin component={<Dashboard />} />, authenticated)} />
         <Route path="inventory">
           <Route path="master-barang" element={authorized(<Admin component={<MasterBarang />} />, authenticated)}/>
+          <Route path="kategori-barang" element={authorized(<Admin component={<Blank />} />, authenticated)}/>
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
