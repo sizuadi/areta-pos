@@ -3,6 +3,7 @@ import React from 'react'
 import { menuData } from '../../Routes/menuData'
 import UserMenu from '../../Components/PageComponent/UserMenu'
 import CustomLink from '../../Components/PageComponent/CustomLink'
+import { asset } from '../../Util/commonHelpers'
 
 export default function Navbar() {
   return (
@@ -36,7 +37,7 @@ export default function Navbar() {
         </div>
         <div className='d-flex align-items-center flex-grow-1 flex-lg-grow-0'>
           <a href='/' className='d-lg-none'>
-            <img alt='Logo' src='assets/media/logos/logo-2.svg' className='h-30px' />
+            <img alt='Logo' src={asset('assets/media/logos/logo-2.svg')} className='h-30px' />
           </a>
         </div>
         <div className='d-flex align-items-stretch justify-content-between flex-lg-grow-1'>
@@ -297,7 +298,7 @@ export default function Navbar() {
                             className='d-flex text-dark text-hover-primary align-items-center mb-5'
                           >
                             <div className='symbol symbol-40px me-4'>
-                              <img src='assets/media/avatars/150-1.jpg' alt='alt-random' />
+                              <img src={asset('assets/media/avatars/150-1.jpg')} alt='alt-random' />
                             </div>
                             <div className='d-flex flex-column justify-content-start fw-bold'>
                               <span className='fs-6 fw-bold'>Karina Clark</span>
@@ -309,7 +310,7 @@ export default function Navbar() {
                             className='d-flex text-dark text-hover-primary align-items-center mb-5'
                           >
                             <div className='symbol symbol-40px me-4'>
-                              <img src='assets/media/avatars/150-3.jpg' alt='alt-random' />
+                              <img src={asset('assets/media/avatars/150-3.jpg')} alt='alt-random' />
                             </div>
                             <div className='d-flex flex-column justify-content-start fw-bold'>
                               <span className='fs-6 fw-bold'>Olivia Bold</span>
@@ -321,7 +322,7 @@ export default function Navbar() {
                             className='d-flex text-dark text-hover-primary align-items-center mb-5'
                           >
                             <div className='symbol symbol-40px me-4'>
-                              <img src='assets/media/avatars/150-8.jpg' alt='alt-random' />
+                              <img src={asset('assets/media/avatars/150-8.jpg')} alt='alt-random' />
                             </div>
                             <div className='d-flex flex-column justify-content-start fw-bold'>
                               <span className='fs-6 fw-bold'>Ana Clark</span>
@@ -333,7 +334,7 @@ export default function Navbar() {
                             className='d-flex text-dark text-hover-primary align-items-center mb-5'
                           >
                             <div className='symbol symbol-40px me-4'>
-                              <img src='assets/media/avatars/150-11.jpg' alt='alt-random' />
+                              <img src={asset('assets/media/avatars/150-11.jpg')} alt='alt-random' />
                             </div>
                             <div className='d-flex flex-column justify-content-start fw-bold'>
                               <span className='fs-6 fw-bold'>Nick Pitola</span>
@@ -345,7 +346,7 @@ export default function Navbar() {
                             className='d-flex text-dark text-hover-primary align-items-center mb-5'
                           >
                             <div className='symbol symbol-40px me-4'>
-                              <img src='assets/media/avatars/150-12.jpg' alt='alt-random' />
+                              <img src={asset('assets/media/avatars/150-12.jpg')} alt='alt-random' />
                             </div>
                             <div className='d-flex flex-column justify-content-start fw-bold'>
                               <span className='fs-6 fw-bold'>Edward Kulnic</span>
@@ -366,7 +367,7 @@ export default function Navbar() {
                               <span className='symbol-label bg-light'>
                                 <img
                                   className='w-20px h-20px'
-                                  src='assets/media/svg/brand-logos/volicity-9.svg'
+                                  src={asset('assets/media/svg/brand-logos/volicity-9.svg')}
                                   alt='alt-random'
                                 />
                               </span>
@@ -384,7 +385,7 @@ export default function Navbar() {
                               <span className='symbol-label bg-light'>
                                 <img
                                   className='w-20px h-20px'
-                                  src='assets/media/svg/brand-logos/tvit.svg'
+                                  src={asset('assets/media/svg/brand-logos/tvit.svg')}
                                   alt='alt-random'
                                 />
                               </span>
@@ -402,7 +403,7 @@ export default function Navbar() {
                               <span className='symbol-label bg-light'>
                                 <img
                                   className='w-20px h-20px'
-                                  src='assets/media/svg/misc/infography.svg'
+                                  src={asset('assets/media/svg/misc/infography.svg')}
                                   alt='alt-random'
                                 />
                               </span>
@@ -420,7 +421,7 @@ export default function Navbar() {
                               <span className='symbol-label bg-light'>
                                 <img
                                   className='w-20px h-20px'
-                                  src='assets/media/svg/brand-logos/leaf.svg'
+                                  src={asset('assets/media/svg/brand-logos/leaf.svg')}
                                   alt='alt-random'
                                 />
                               </span>
@@ -438,7 +439,7 @@ export default function Navbar() {
                               <span className='symbol-label bg-light'>
                                 <img
                                   className='w-20px h-20px'
-                                  src='assets/media/svg/brand-logos/tower.svg'
+                                  src={asset('assets/media/svg/brand-logos/tower.svg')}
                                   alt='alt-random'
                                 />
                               </span>
@@ -1546,7 +1547,7 @@ export default function Navbar() {
                           <img
                             className='mw-100 mh-200px'
                             alt='alt-random'
-                            src='assets/media/illustrations/sketchy-1/1.png'
+                            src={asset('assets/media/illustrations/sketchy-1/1.png')}
                           />
                         </div>
                       </div>

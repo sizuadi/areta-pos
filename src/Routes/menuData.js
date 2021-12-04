@@ -27,7 +27,7 @@ export const menuData = [
     subMenu: [
       {
         title: "Master Barang",
-        url: "/master-barang",
+        url: "/inventory/master-barang",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -35,7 +35,7 @@ export const menuData = [
       },
       {
         title: "Kategori Barang",
-        url: "/kategori-barang",
+        url: "/inventory/kategori-barang",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",

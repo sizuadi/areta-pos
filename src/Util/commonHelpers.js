@@ -9,3 +9,17 @@ export const rupiah = (nominal) => {
 
   return `Rp. ${formatter}`;
 }
+
+export const asset = url => {
+  const firstChar = url.charAt(0);
+  
+  let formattedUrl = ''
+
+  if (firstChar !== '/') {
+    formattedUrl = url;
+  } else {
+    formattedUrl = url.substring(1);
+  }
+  
+  return `${window.location.origin}/${formattedUrl}`;
+}

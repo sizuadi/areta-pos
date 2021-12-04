@@ -4,6 +4,7 @@ import { useSanctum } from 'react-sanctum';
 import CustomLink from '../../Components/PageComponent/CustomLink';
 
 import { menuData } from '../../Routes/menuData'
+import { asset } from '../../Util/commonHelpers';
 
 export default function Sidebar() {
   const { signOut } = useSanctum();
@@ -37,7 +38,7 @@ export default function Sidebar() {
     >
       <div className='aside-logo flex-column-auto' id='kt_aside_logo'>
         <Link to='/'>
-          <img alt='Logo' src='assets/media/logos/logo-1-dark.svg' className='h-25px logo' />
+          <img alt='Logo' src={asset('assets/media/logos/logo-1-dark.svg')} className='h-25px logo' />
         </Link>
         <div
           id='kt_aside_toggle'

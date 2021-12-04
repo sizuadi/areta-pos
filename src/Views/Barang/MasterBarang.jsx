@@ -4,7 +4,7 @@ import { useSanctum } from 'react-sanctum';
 
 import TableLoader from '../../Components/PageComponent/TableLoader';
 import api from '../../Util/api'
-import { rupiah } from '../../Util/commonHelpers';
+import { asset, rupiah } from '../../Util/commonHelpers';
 
 export default function MasterBarang() {
   const [paginated, setPaginated] = useState({
@@ -88,7 +88,7 @@ export default function MasterBarang() {
         <td>
           <div className="d-flex align-items-center">
             <div className="symbol symbol-50px me-5">
-              <img src={"assets/media/products/box.png"} className="h-75 align-self-end" alt="product" />
+              <img src={asset("assets/media/products/box.png")} className="h-75 align-self-end" alt="product" />
             </div>
             <div className="d-flex justify-content-start flex-column">
               <span className="text-dark fw-bolder text-hover-primary cursor-pointer mb-1 fs-6">{item.name}</span>

@@ -22,13 +22,15 @@ function App() {
             authenticated
           )}
         />
-        <Route
-          path="/master-barang"
-          element={authorized(
-            <Admin component={<MasterBarang />} />,
-            authenticated
-          )}
-        />
+        <Route path="inventory">
+          <Route
+            path="master-barang"
+            element={authorized(
+              <Admin component={<MasterBarang />} />,
+              authenticated
+            )}
+          />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
