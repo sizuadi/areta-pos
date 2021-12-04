@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Dashboard() {
   return (
-    <div>
+    <>
       <div className="toolbar" id="kt_toolbar">
         <div
           id="kt_toolbar_container"
@@ -628,6 +628,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -12,14 +12,12 @@ export default function Admin({ component }) {
   });
     
   return (
-    <div className="d-flex flex-column flex-root">
-      <div className="page d-flex flex-row flex-column-fluid">
-        <Sidebar />
-        <div className="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-          <Navbar />
-          <ContentWrapper component={component} />
-          <Footer />
-        </div>
+    <div className="page d-flex flex-row flex-column-fluid">
+      <Sidebar />
+      <div className="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+        <Navbar />
+        <ContentWrapper component={component} />
+        <Footer />
       </div>
     </div>
   );

@@ -75,7 +75,7 @@ export default function MasterBarang() {
   })
 
   return (
-    <div>
+    <>
       <div className='toolbar' id='kt_toolbar'>
         <div id='kt_toolbar_container' className='container-fluid d-flex flex-stack'>
           <div
@@ -113,6 +113,6 @@ export default function MasterBarang() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
