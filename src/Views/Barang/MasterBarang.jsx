@@ -1,31 +1,37 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSanctum } from 'react-sanctum';
+import { Link } from 'react-router-dom';
 
-import TableLoader from '../../Components/PageComponent/TableLoader';
 import api from '../../Util/api'
+import Table from '../../Components/PageComponent/Table';
 import { asset, rupiah } from '../../Util/commonHelpers';
+import TablePagination from '../../Components/PageComponent/TablePagination';
+import { defaultBlueprint } from '../../Components/pagination.blueprint';
 
 export default function MasterBarang() {
-  const [paginated, setPaginated] = useState({
-    current_page: 0,
-    data: [],
-    first_page_url: "",
-    from: 0,
-    last_page: 0,
-    last_page_url: "",
-    links: [],
-    next_page_url: "",
-    path: "",
-    per_page: 0,
-    prev_page_url: "",
-    to: 0,
-    total: 0,
-  });
-
   const {signOut} = useSanctum()
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [paginated, setPaginated] = useState(defaultBlueprint);
+
+  const tableHeader = [
+    {
+      title: "Nama Produk",
+      className: "ps-4 min-w-300px rounded-start"
+    },
+    {
+      title: "Harga",
+      className: "min-w-125px"
+    },
+    {
+      title: "Deskripsi",
+      className: "min-w-200px"
+    },
+    {
+      title: "",
+      className: "min-w-200px text-end rounded-end"
+    },
+  ]
 
   useEffect(() => {
     api().get(`/api/products?page=${currentPage}`).then(response => {
@@ -37,50 +43,6 @@ export default function MasterBarang() {
       }
     });
   }, [currentPage, signOut]);
-
-  const nextHandler = e => {
-    e.preventDefault();
-    setIsLoading(true);
-    setCurrentPage(currentPage + 1);
-  }
-
-  const prevHandler = e => {
-    e.preventDefault();
-    setIsLoading(true);
-    setCurrentPage(currentPage - 1);
-  }
-
-  const goToHandler = (e, page) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setCurrentPage(page);
-  }
-
-  let clonedPagination = !isLoading && paginated.links.slice();
-  !isLoading && clonedPagination.shift();
-  !isLoading && clonedPagination.pop();
-  
-  let pagination = !isLoading && clonedPagination.map((item, index) => {
-    return (
-      <div key={index}>
-        <li className={`page-item ${item.active && 'active'} m-1`}><span className="page-link cursor-pointer" onClick={(e) => goToHandler(e, parseInt(item.label))}>{item.label}</span></li>
-      </div>
-    )
-  })
-
-  let firstPage = !isLoading && (
-    <div>
-      <li className={`page-item previous m-1 ${!paginated.prev_page_url ? 'disabled' : null}`}><span className="page-link cursor-pointer" onClick={(e) => prevHandler(e)}><i className="previous"></i></span></li>
-    </div>
-  );
-
-  let lastPage = !isLoading && (
-    <div>
-      <li className={`page-item previous m-1 ${!paginated.next_page_url ? 'disabled' : null}`}><span className="page-link cursor-pointer" onClick={(e) => nextHandler(e)}><i className="next"></i></span></li>
-    </div>
-  );
-
-  let loader = <TableLoader colSpan={4} />
 
   let products = paginated.data?.map((item, index) => {
     return (
@@ -105,13 +67,12 @@ export default function MasterBarang() {
           </span>
         </td>
         <td className="text-end">
-          <a href="/" className="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4 me-2">View</a>
-          <a href="/" className="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4">Edit</a>
+          <Link to="/" className="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4 me-2">View</Link>
+          <Link to="/" className="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4">Edit</Link>
         </td>
       </tr>
     )
   })
-  
 
   return (
     <div>
@@ -145,27 +106,9 @@ export default function MasterBarang() {
             </div>
             <div className="card-body py-3">
               <div className="table-responsive">
-                <table className="table align-middle gs-0 gy-4">
-                  <thead>
-                    <tr className="fw-bolder text-muted bg-light">
-                      <th className="ps-4 min-w-300px rounded-start">Nama Produk</th>
-                      <th className="min-w-125px">Harga</th>
-                      <th className="min-w-200px">Deskripsi</th>
-                      <th className="min-w-200px text-end rounded-end"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {isLoading ? loader : products}
-                  </tbody>
-                </table>
+                <Table loadingState={isLoading} tableHeader={tableHeader} tableBody={products} />
               </div>
-              <nav aria-label="Page navigation example">
-                <ul className="pagination pagination-outline justify-content-end">
-                  {!isLoading && firstPage}
-                  {!isLoading && pagination}
-                  {!isLoading && lastPage}
-                </ul>
-              </nav>
+              <TablePagination loadingState={isLoading} paginationApi={paginated} currentPage={currentPage} setIsLoading={setIsLoading} setCurrentPage={setCurrentPage} />
             </div>
           </div>
         </div>
