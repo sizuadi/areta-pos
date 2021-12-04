@@ -15,21 +15,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={guest(<Login />, authenticated)} />
-        <Route
-          path="/"
-          element={authorized(
-            <Admin component={<Dashboard />} />,
-            authenticated
-          )}
-        />
+        <Route path="/" element={authorized(<Admin component={<Dashboard />} />, authenticated)} />
         <Route path="inventory">
-          <Route
-            path="master-barang"
-            element={authorized(
-              <Admin component={<MasterBarang />} />,
-              authenticated
-            )}
-          />
+          <Route path="master-barang" element={authorized(<Admin component={<MasterBarang />} />, authenticated)}/>
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
