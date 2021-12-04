@@ -4,7 +4,7 @@ import { useSanctum } from 'react-sanctum';
 import CustomLink from '../../Components/PageComponent/CustomLink';
 
 import { menuData } from '../../Routes/menuData'
-import { asset } from '../../Util/commonHelpers';
+import { asset, isActivePath } from '../../Util/commonHelpers';
 
 export default function Sidebar() {
   const { signOut } = useSanctum();
@@ -102,8 +102,8 @@ export default function Sidebar() {
             </div>
             {menuData.map((menu, index) => {
               return (
-                <div data-kt-menu-trigger='click' className='menu-item menu-accordion' key={index}>
-                  <span className='menu-link'>
+                <div data-kt-menu-trigger='click' className={`menu-item ${isActivePath(menu.prefix, window.location.href) && 'show'} menu-accordion`} key={index}>
+                  <span className={`menu-link ${isActivePath(menu.prefix, window.location.href) && 'active'}`}>
                     {menu.icon}
                     <span className='menu-title'>{menu.title}</span>
                     <span className='menu-arrow' />

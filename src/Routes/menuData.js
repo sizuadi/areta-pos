@@ -1,6 +1,7 @@
 export const menuData = [
   {
     title: "Inventory",
+    prefix: "inventory",
     icon: (
       <span className="menu-icon">
         <span className="svg-icon svg-icon-2">
@@ -93,6 +94,7 @@ export const menuData = [
   },
   {
     title: "Harga",
+    prefix: "harga",
     icon: (
       <span className="menu-icon">
         <span className="svg-icon svg-icon-2">
