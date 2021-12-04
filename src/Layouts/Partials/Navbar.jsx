@@ -3,7 +3,7 @@ import React from 'react'
 import { menuData } from '../../Routes/menuData'
 import UserMenu from '../../Components/PageComponent/UserMenu'
 import CustomLink from '../../Components/PageComponent/CustomLink'
-import { asset } from '../../Util/commonHelpers'
+import { asset, isActivePath } from '../../Util/commonHelpers'
 
 export default function Navbar() {
   return (
@@ -71,7 +71,7 @@ export default function Navbar() {
                       key={index}
                       data-kt-menu-trigger='click'
                       data-kt-menu-placement='bottom-start'
-                      className='menu-item menu-lg-down-accordion me-lg-1'
+                      className={`menu-item ${isActivePath(menu.prefix, window.location.href) && 'show'} menu-lg-down-accordion me-lg-1`}
                     >
                       <span className='menu-link py-3'>
                         <span className='menu-title'>{menu.title}</span>
