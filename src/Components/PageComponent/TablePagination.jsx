@@ -26,7 +26,7 @@ export default function TablePagination({loadingState, paginationApi, currentPag
   let pagination = !loadingState && clonedPagination.map((item, index) => {
     return (
       <div key={index}>
-        <li className={`page-item ${item.active && 'active'} m-1`}><span className="page-link cursor-pointer" onClick={(e) => goToHandler(e, parseInt(item.label))}>{item.label}</span></li>
+        <li className={`page-item ${item.active && 'active'} m-1 ${!item.url && 'disabled'}`}><span className="page-link cursor-pointer" onClick={(e) => goToHandler(e, parseInt(item.label))}>{item.label}</span></li>
       </div>
     )
   })
