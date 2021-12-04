@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import { useSanctum } from 'react-sanctum';
 import CustomLink from '../../Components/PageComponent/CustomLink';
+import { toggle } from '../../Components/sidebar.toggler';
 
 import { menuData } from '../../Routes/menuData'
 import { asset, isActivePath } from '../../Util/commonHelpers';
@@ -47,6 +48,7 @@ export default function Sidebar() {
           data-kt-toggle-state='active'
           data-kt-toggle-target='body'
           data-kt-toggle-name='aside-minimize'
+          onClick={() => toggle()}
         >
           <span className='svg-icon svg-icon-1 rotate-180'>
             <svg
