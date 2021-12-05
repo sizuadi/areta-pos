@@ -34,14 +34,23 @@ export default function MasterBarang() {
   ]
 
   useEffect(() => {
-    api().get(`/api/products?page=${currentPage}`).then(response => {
+    const abortController = new AbortController();
+    
+    api().get(`/api/products?page=${currentPage}`, {
+      signal: abortController.signal,
+    }).then(response => {
       setPaginated(response.data);
       setIsLoading(false);
     }).catch(err => {
-      if (err.response.status === 401) {
+      if (err.response?.status === 401) {
         signOut();
       }
     });
+
+    return () => {
+      setIsLoading(true);
+      abortController.abort();
+    };
   }, [currentPage, signOut]);
 
   let products = paginated.data?.map((item, index) => {
