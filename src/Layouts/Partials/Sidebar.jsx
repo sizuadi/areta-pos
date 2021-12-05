@@ -90,8 +90,8 @@ export default function Sidebar() {
             </div>
             {menuData.map((menu, index) => {
               return (
-                <div data-kt-menu-trigger='click' className={`menu-item ${isActivePath(menu.prefix, window.location.href) && 'show'} menu-accordion`} key={index}>
-                  <span className={`menu-link ${isActivePath(menu.prefix, window.location.href) && 'active'}`}>
+                <div data-kt-menu-trigger='click' className={`menu-item ${isActivePath(menu.prefix) && 'show'} menu-accordion`} key={index}>
+                  <span className={`menu-link ${isActivePath(menu.prefix) && 'active'}`}>
                     {menu.icon}
                     <span className='menu-title'>{menu.title}</span>
                     <span className='menu-arrow' />

@@ -24,9 +24,6 @@ export const asset = url => {
   return `${window.location.origin}/${formattedUrl}`;
 }
 
-export const isActivePath = (expected, input) => {
-  let realInput = input.replace('http://', '').split('/')[1] ? input.replace('http://', '').split('/')[1] : '/';
-  let realUrl = expected.replace('/', '');
-
-  return realInput === realUrl;
+export const isActivePath = (expected) => {
+  return expected.replace('/', '') === window.location.pathname.split('/')[1];
 }
