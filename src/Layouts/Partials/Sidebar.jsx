@@ -6,24 +6,10 @@ import CustomLink from '../../Components/PageComponent/CustomLink';
 import { menuData } from '../../Routes/menuData'
 import { toggle } from '../../Components/sidebar.toggler';
 import { asset, isActivePath } from '../../Util/commonHelpers';
+import { logoutConfirmation } from '../../Util/sweetalert.helper';
 
 export default function Sidebar() {
   const { signOut } = useSanctum();
-
-  const logoutConfirmation = () => window['Swal'].fire({
-    title: "Apakah anda yakin?",
-    text: "Keluar dari aplikasi!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Logout",
-    cancelButtonText: "Batal",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      signOut();
-    }
-  });
     
   return (
     <div
@@ -135,7 +121,7 @@ export default function Sidebar() {
       <div className="aside-footer flex-column-auto pt-5 pb-7 px-5" id="kt_aside_footer">
         <a href="/" className="btn btn-custom btn-primary w-100" onClick={(e) => {
             e.preventDefault();
-            logoutConfirmation();
+            logoutConfirmation(signOut);
         }}>
             <span className="btn-label">Logout</span>
             <span className="svg-icon btn-icon svg-icon-2">
