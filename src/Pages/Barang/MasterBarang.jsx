@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import api from '../../Util/api'
 import Table from '../../Components/PageComponent/Table';
-import { asset, rupiah } from '../../Util/commonHelpers';
+import { abortController, asset, rupiah } from '../../Util/commonHelpers';
 import TablePagination from '../../Components/PageComponent/TablePagination';
 import { defaultBlueprint } from '../../Components/pagination.blueprint';
 
@@ -13,31 +13,41 @@ export default function MasterBarang() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [paginated, setPaginated] = useState(defaultBlueprint);
+  const [formInput, setFormInput] = useState({search: '', length: 5});
 
   const tableHeader = [
     {
       title: "Nama Produk",
-      className: "ps-4 min-w-300px rounded-start"
+      className: "ps-4 min-w-300px rounded-start",
+    },
+    {
+      title: "Stok",
+      className: "min-w-125px",
     },
     {
       title: "Harga",
-      className: "min-w-125px"
+      className: "min-w-125px",
     },
     {
       title: "Deskripsi",
       className: "min-w-200px"
     },
     {
+      title: "Status",
+      className: "",
+    },
+    {
       title: "",
-      className: "min-w-200px text-end rounded-end"
+      className: "min-w-200px text-end rounded-end",
     },
   ]
 
-  useEffect(() => {
-    const abortController = new AbortController();
-    
+  useEffect(() => {    
+    setIsLoading(true);
+
     api().get(`/api/products?page=${currentPage}`, {
-      signal: abortController.signal,
+      signal: abortController().signal,
+      params: formInput,
     }).then(response => {
       setPaginated(response.data);
       setIsLoading(false);
@@ -48,15 +58,32 @@ export default function MasterBarang() {
     });
 
     return () => {
-      setIsLoading(true);
-      abortController.abort();
+      abortController().abort();
     };
-  }, [currentPage, signOut]);
+  }, [currentPage, signOut, formInput]);
 
-  let products = paginated.data?.map((item, index) => {
+  const searchHandler = (e) => {
+    let searchValue = document.getElementById('search').value;
+    
+    setFormInput(prevState => ({...prevState, search: searchValue}));
+  }
+
+  const pageLength = e => {
+    e.persist();
+
+    setFormInput(prevState => ({...prevState, length: e.target.value}));
+  }
+
+  let products = paginated.data.length === 0 ? 
+  <tr>
+    <td colSpan={tableHeader.length} className="text-center">
+      <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">Barang tidak ditemukan.</span>
+    </td>
+  </tr> :
+  paginated.data.map((item, index) => {
     return (
       <tr key={index}>
-        <td>
+        <td className="ps-2">
           <div className="d-flex align-items-center">
             <div className="symbol symbol-50px me-5">
               <img src={asset("assets/media/products/box.png")} className="h-75 align-self-end" alt="product" />
@@ -68,6 +95,9 @@ export default function MasterBarang() {
           </div>
         </td>
         <td>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.id}</span>
+        </td>
+        <td>
           <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{rupiah(item.price)}</span>
         </td>
         <td>
@@ -75,9 +105,16 @@ export default function MasterBarang() {
             {item.description}
           </span>
         </td>
-        <td className="text-end">
-          <Link to="/" className="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4 me-2">View</Link>
-          <Link to="/" className="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4">Edit</Link>
+        <td>
+          <span className="ms-2 badge badge-light-success fs-6 fw-bold">Aktif</span>
+        </td>
+        <td className="text-end pe-2">
+          <Link to="/" className="badge badge-success p-3 me-1" onClick={(e) => e.preventDefault()}>
+            <i className="fas fa-pen fs-5 text-white"></i>
+          </Link>
+          <Link to="/" className="badge badge-danger p-3" onClick={(e) => e.preventDefault()}>
+            <i className="fas fa-trash fs-5 text-white"></i>
+          </Link>
         </td>
       </tr>
     )
@@ -87,12 +124,7 @@ export default function MasterBarang() {
     <>
       <div className='toolbar' id='kt_toolbar'>
         <div id='kt_toolbar_container' className='container-fluid d-flex flex-stack'>
-          <div
-            data-kt-swapper='true'
-            data-kt-swapper-mode='prepend'
-            data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-            className='page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0'
-          >
+          <div data-kt-swapper='true' data-kt-swapper-mode='prepend' data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" className='page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0'>
             <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Master Barang</h1>
             <span className='h-20px border-gray-200 border-start ms-3 mx-2' />
             <small className='text-muted fs-7 fw-bold my-1 ms-1'>List Page</small>
@@ -103,21 +135,42 @@ export default function MasterBarang() {
         <div id='kt_content_container' className='container-xxl'>
           <div className="card mb-5 mb-xl-8">
             <div className="card-header border-0 pt-5">
-              <h3 className="card-title align-items-start flex-column">
-                <span className="card-label fw-bolder fs-3 mb-1">Daftar Barang</span>
-                <span className="text-muted mt-1 fw-bold fs-7">Semua barang inventory</span>
-              </h3>
+              <div className="d-flex align-items-center">
+                <div className="position-relative w-md-400px me-2">
+                  <span className="svg-icon svg-icon-3 svg-icon-gray-500 position-absolute top-50 translate-middle ms-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black"></rect>
+                      <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black"></path>
+                    </svg>
+                  </span>
+                  <input type="text" className="form-control form-control-solid ps-10" name="search" id="search" placeholder="Nama Barang"/>
+                </div>
+                <div className="d-flex align-items-center">
+                  <button className="btn btn-light text-hover-primary me-5" onClick={searchHandler}>Cari</button>
+                </div>
+              </div>
               <div className="card-toolbar">
                 <button type="button" className="btn btn-primary">
-                  Tambah
+                  Tambah Barang
                 </button>
               </div>
             </div>
             <div className="card-body py-3">
-              <div className="table-responsive">
-                <Table loadingState={isLoading} tableHeader={tableHeader} tableBody={products} />
+              <div className="row">
+                <div className="col-12 mt-4">
+                  <div className="table-responsive">
+                    <Table loadingState={isLoading} tableHeader={tableHeader} tableBody={products} />
+                  </div>
+                  <TablePagination 
+                    loadingState={isLoading}
+                    paginationApi={paginated}
+                    currentPage={currentPage}
+                    loadingSetter={setIsLoading}
+                    currentPageSetter={setCurrentPage}
+                    pageLengthSetter={pageLength}
+                  />
+                </div>
               </div>
-              <TablePagination loadingState={isLoading} paginationApi={paginated} currentPage={currentPage} setIsLoading={setIsLoading} setCurrentPage={setCurrentPage} />
             </div>
           </div>
         </div>

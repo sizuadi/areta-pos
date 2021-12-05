@@ -27,3 +27,7 @@ export const asset = url => {
 export const isActivePath = (expected) => {
   return expected.replace('/', '') === window.location.pathname.split('/')[1];
 }
+
+export function abortController() {
+  return new AbortController();
+}

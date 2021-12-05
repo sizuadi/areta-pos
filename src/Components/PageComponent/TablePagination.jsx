@@ -1,22 +1,22 @@
 import React from 'react'
 
-export default function TablePagination({loadingState, paginationApi, currentPage, setIsLoading, setCurrentPage}) {
+export default function TablePagination({loadingState, paginationApi, currentPage, loadingSetter, currentPageSetter, pageLengthSetter}) {
   const nextHandler = e => {
     e.preventDefault();
-    setIsLoading(true);
-    setCurrentPage(currentPage + 1);
+    loadingSetter(true);
+    currentPageSetter(currentPage + 1);
   }
 
   const prevHandler = e => {
     e.preventDefault();
-    setIsLoading(true);
-    setCurrentPage(currentPage - 1);
+    loadingSetter(true);
+    currentPageSetter(currentPage - 1);
   }
 
   const goToHandler = (e, page) => {
     e.preventDefault();
-    setIsLoading(true);
-    setCurrentPage(page);
+    loadingSetter(true);
+    currentPageSetter(page);
   }
 
   let clonedPagination = !loadingState && paginationApi.links.slice();
@@ -44,12 +44,29 @@ export default function TablePagination({loadingState, paginationApi, currentPag
   );
   
   return (
-    <nav aria-label="Page navigation example">
-      <ul className="pagination pagination-outline justify-content-end">
-        {firstPage}
-        {pagination}
-        {lastPage}
-      </ul>
-    </nav>
+    <div className="row">
+      <div className="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
+        <div className="dataTables_length" id="kt_datatable_example_1_length">
+          <label>
+            <select name="kt_datatable_example_1_length" aria-controls="kt_datatable_example_1" className="form-select form-select-sm form-select-solid" onChange={pageLengthSetter}>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </select>
+          </label>
+        </div>
+        <div className="dataTables_info" id="kt_datatable_example_1_info" role="status" aria-live="polite">Menampilkan {!paginationApi.total ? 0 : `${paginationApi.from} sampai ${paginationApi.to}`} dari {paginationApi.total} data</div>
+      </div>
+      <div className="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+      <nav aria-label="Page navigation example">
+        <ul className="pagination pagination-outline justify-content-end">
+          {firstPage}
+          {pagination}
+          {lastPage}
+        </ul>
+      </nav>
+      </div>
+    </div>
   )
 }
