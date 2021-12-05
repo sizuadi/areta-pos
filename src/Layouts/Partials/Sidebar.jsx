@@ -2,9 +2,9 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import { useSanctum } from 'react-sanctum';
 import CustomLink from '../../Components/PageComponent/CustomLink';
-import { toggle } from '../../Components/sidebar.toggler';
 
 import { menuData } from '../../Routes/menuData'
+import { toggle } from '../../Components/sidebar.toggler';
 import { asset, isActivePath } from '../../Util/commonHelpers';
 
 export default function Sidebar() {
