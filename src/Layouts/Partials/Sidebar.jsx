@@ -89,7 +89,7 @@ export default function Sidebar() {
               </CustomLink>
             </div>
             {menuData.map((menu, index) => {
-              return (
+              return menu.hasSubMenu ? (
                 <div data-kt-menu-trigger='click' className={`menu-item ${isActivePath(menu.prefix) && 'show'} menu-accordion`} key={index}>
                   <span className={`menu-link ${isActivePath(menu.prefix) && 'active'}`}>
                     {menu.icon}
@@ -112,6 +112,13 @@ export default function Sidebar() {
                       )
                     })}
                   </div>
+                </div>
+              ) : (
+                <div className='menu-item pb-8'>
+                  <CustomLink className={`menu-link`} to={menu.url}>
+                    {menu.icon}
+                    <span className='menu-title'>{menu.title}</span>
+                  </CustomLink>
                 </div>
               )
             })}
