@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import api from '../../Util/api'
 import Table from '../../Components/PageComponent/Table';
-import { abortController, asset, rupiah } from '../../Util/commonHelpers';
+import { asset, rupiah } from '../../Util/commonHelpers';
 import TablePagination from '../../Components/PageComponent/TablePagination';
 import { defaultBlueprint } from '../../Components/pagination.blueprint';
 
@@ -45,8 +45,10 @@ export default function MasterBarang() {
   useEffect(() => {    
     setIsLoading(true);
 
+    const abortController = new AbortController();
+
     api().get(`/api/products?page=${currentPage}`, {
-      signal: abortController().signal,
+      signal: abortController.signal,
       params: formInput,
     }).then(response => {
       setPaginated(response.data);
@@ -58,7 +60,7 @@ export default function MasterBarang() {
     });
 
     return () => {
-      abortController().abort();
+      abortController.abort();
     };
   }, [currentPage, signOut, formInput]);
 
