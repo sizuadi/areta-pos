@@ -114,7 +114,7 @@ export default function Sidebar() {
                   </div>
                 </div>
               ) : (
-                <div className='menu-item pb-8'>
+                <div className='menu-item pb-8' key={index}>
                   <CustomLink className={`menu-link`} to={menu.url}>
                     {menu.icon}
                     <span className='menu-title'>{menu.title}</span>

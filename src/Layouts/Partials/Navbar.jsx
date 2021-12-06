@@ -58,7 +58,7 @@ export default function Navbar() {
                       </div>
                     </div>
                   ) : (
-                    <div className='menu-item me-lg-1'>
+                    <div className='menu-item me-lg-1' key={index}>
                       <CustomLink className={`menu-link py-3`} to={menu.url}>
                         <span className='menu-title'>{menu.title}</span>
                       </CustomLink>

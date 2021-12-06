@@ -9,6 +9,7 @@ import Dashboard from "./Pages/Home/Dashboard";
 import Blank from "./Pages/Blank";
 
 import { authorized, guest } from "./Util/authHelper";
+import Cashier from "./Pages/Cashier";
 
 function App() {
   const { authenticated } = useSanctum();
@@ -22,6 +23,7 @@ function App() {
           <Route path="master-barang" element={authorized(<Admin component={<MasterBarang />} />, authenticated)}/>
           <Route path="kategori-barang" element={authorized(<Admin component={<Blank />} />, authenticated)}/>
         </Route>
+        <Route path="cashier" element={authorized(<Admin component={<Cashier />} />, authenticated)} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
