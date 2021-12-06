@@ -21,7 +21,7 @@ export default function Navbar() {
         </div>
         <div className='d-flex align-items-center flex-grow-1 flex-lg-grow-0'>
           <a href='/' className='d-lg-none'>
-            <img alt='Logo' src={asset('assets/media/logos/logo-2.svg')} className='h-30px' />
+            <img alt='Logo' src={asset('assets/media/logos/logo-aretaamany.png')} className='h-30px' />
           </a>
         </div>
         <div className='d-flex align-items-stretch justify-content-between flex-lg-grow-1'>

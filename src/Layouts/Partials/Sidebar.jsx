@@ -25,7 +25,7 @@ export default function Sidebar() {
     >
       <div className='aside-logo flex-column-auto' id='kt_aside_logo'>
         <Link to='/'>
-          <img alt='Logo' src={asset('assets/media/logos/logo-1-dark.svg')} className='h-25px logo' />
+          <img alt='Logo' src={asset('assets/media/logos/logo-aretaamany-white-2.png')} className='h-40px logo' />
         </Link>
         <div
           id='kt_aside_toggle'
