@@ -67,6 +67,7 @@ export default function MasterBarang() {
   const searchHandler = (e) => {
     let searchValue = document.getElementById('search').value;
     
+    setCurrentPage(1);
     setFormInput(prevState => ({...prevState, search: searchValue}));
   }
 
