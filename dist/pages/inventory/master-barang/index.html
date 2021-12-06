@@ -24,7 +24,10 @@
 		<link href="../../../assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="../../../assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
         <link href="../../../assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css"/>
+		<link href="../../../assets/plugins/custom/bootstrap-switch/css/bootstrap4-toggle.min.css" rel="stylesheet" type="text/css" />
 		<!--end::Global Stylesheets Bundle-->
+		<link href="../../../assets/css/custom.css" rel="stylesheet" type="text/css" />
+
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
@@ -137,14 +140,7 @@
 												<span class="menu-title">Barang Reject</span>
 											</a>
 										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="#">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Barang Return</span>
-											</a>
-										</div>
+										
 										<div class="menu-item">
 											<a class="menu-link" href="#">
 												<span class="menu-bullet">
@@ -397,14 +393,6 @@
 																<span class="bullet bullet-dot"></span>
 															</span>
 															<span class="menu-title">Barang Reject</span>
-														</a>
-													</div>
-													<div class="menu-item">
-														<a class="menu-link py-3" href="#">
-															<span class="menu-bullet">
-																<span class="bullet bullet-dot"></span>
-															</span>
-															<span class="menu-title">Barang Return</span>
 														</a>
 													</div>
 													<div class="menu-item">
@@ -2369,6 +2357,7 @@
                                                     <thead>
                                                         <tr class="fw-bold fs-6">
                                                             <th>Nama Barang</th>
+                                                            <th>Kode</th>
                                                             <th>Kategori</th>
                                                             <th>Stock</th>
                                                             <th>Harga</th>
@@ -2378,12 +2367,22 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>Samsung J1 Ace</td>
+															<td>
+																<div class="d-flex align-items-center">
+																	<div class="symbol symbol-50px me-5">
+																		<img src="../../../assets/media/products/1.png" alt="">
+																	</div>
+																	<div class="d-flex justify-content-start flex-column">
+																		<a href="#" class="text-dark fw-bolder text-hover-primary fs-6">Smart Watch</a>
+																	</div>
+																</div>
+															</td>
+															<td>B0001</td>                                                
                                                             <td>Teknologi</td>
                                                             <td>100</td>
                                                             <td>Rp. 1.000.000</td>
                                                             <td>
-                                                                <span class="ms-2 badge badge-light-success fs-6 fw-bold">Aktif</span>
+                                                                <input type="checkbox" checked data-toggle="toggle" data-size="sm" data-on="Aktif" data-off="Nonaktif">
                                                             </td>
                                                             <td>
                                                                 <a href="#" class="badge badge-success p-3">
@@ -2395,12 +2394,22 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Samsung J1 Ace</td>
+															<td>
+																<div class="d-flex align-items-center">
+																	<div class="symbol symbol-50px me-5">
+																		<img src="../../../assets/media/products/1.png" alt="">
+																	</div>
+																	<div class="d-flex justify-content-start flex-column">
+																		<a href="#" class="text-dark fw-bolder text-hover-primary fs-6">Smart Watch</a>
+																	</div>
+																</div>
+															</td>
+															<td>B0001</td>                                                
                                                             <td>Teknologi</td>
                                                             <td>100</td>
                                                             <td>Rp. 1.000.000</td>
                                                             <td>
-                                                                <span class="ms-2 badge badge-light-success fs-6 fw-bold">Aktif</span>
+                                                                <input type="checkbox" checked data-toggle="toggle" data-size="sm" data-on="Aktif" data-off="Nonaktif">
                                                             </td>
                                                             <td>
                                                                 <a href="#" class="badge badge-success p-3">
@@ -2412,12 +2421,22 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Samsung J1 Ace</td>
+															<td>
+																<div class="d-flex align-items-center">
+																	<div class="symbol symbol-50px me-5">
+																		<img src="../../../assets/media/products/1.png" alt="">
+																	</div>
+																	<div class="d-flex justify-content-start flex-column">
+																		<a href="#" class="text-dark fw-bolder text-hover-primary fs-6">Smart Watch</a>
+																	</div>
+																</div>
+															</td>
+															<td>B0001</td>                                                
                                                             <td>Teknologi</td>
                                                             <td>100</td>
                                                             <td>Rp. 1.000.000</td>
                                                             <td>
-                                                                <span class="ms-2 badge badge-light-success fs-6 fw-bold">Aktif</span>
+                                                                <input type="checkbox" checked data-toggle="toggle" data-size="sm" data-on="Aktif" data-off="Nonaktif">
                                                             </td>
                                                             <td>
                                                                 <a href="#" class="badge badge-success p-3">
@@ -5231,6 +5250,7 @@
 		<!--begin::Global Javascript Bundle(used by all pages)-->
 		<script src="../../../assets/plugins/global/plugins.bundle.js"></script>
 		<script src="../../../assets/js/scripts.bundle.js"></script>
+		<script src="../../../assets/plugins/custom/bootstrap-switch/js/bootstrap4-toggle.js"></script>
 		<!--end::Global Javascript Bundle-->
 		<!--begin::Page Vendors Javascript(used by this page)-->
 		<script src="../../../assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>

@@ -80,8 +80,8 @@
 										<span class="menu-title">Dashboard</span>
 									</a>
 								</div>
-								<div data-kt-menu-trigger="click" class="menu-item menu-accordion pt-8 hover showing">
-									<span class="menu-link active">
+								<div data-kt-menu-trigger="click" class="menu-item menu-accordion pt-8">
+									<span class="menu-link">
 										<span class="menu-icon">
 											<!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
 											<span class="svg-icon svg-icon-2">
@@ -96,17 +96,17 @@
 										<span class="menu-title">Inventory</span>
 										<span class="menu-arrow"></span>
 									</span>
-									<div class="menu-sub menu-sub-accordion menu-active-bg show">
+									<div class="menu-sub menu-sub-accordion">
 										<div class="menu-item">
-											<a class="menu-link" href="../master-barang/index.html">
+											<a class="menu-link active" href="../../inventory/master-barang/index.html">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
 												<span class="menu-title">Master Barang</span>
 											</a>
 										</div>
-										<div class="menu-item active">
-											<a class="menu-link active" href="./index.html">
+										<div class="menu-item">
+											<a class="menu-link" href="../../inventory/barang-kategori/index.html">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
@@ -256,8 +256,8 @@
 										</div>
 									</div>
 								</div>
-								<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-									<span class="menu-link">
+								<div data-kt-menu-trigger="click" class="menu-item menu-accordion hover showing">
+									<span class="menu-link active">
 										<span class="menu-icon">
 											<!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
 											<span class="svg-icon svg-icon-2">
@@ -271,9 +271,9 @@
 										<span class="menu-title">Manajemen Akses</span>
 										<span class="menu-arrow"></span>
 									</span>
-									<div class="menu-sub menu-sub-accordion menu-active-bg">
+									<div class="menu-sub menu-sub-accordion menu-active-bg show">
 										<div class="menu-item">
-											<a class="menu-link" href="#">
+											<a class="menu-link active" href="./index.html">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
@@ -353,7 +353,7 @@
 												</span>
 												<div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
 													<div class="menu-item">
-														<a class="menu-link py-3" href="../master-barang/index.html">
+														<a class="menu-link active py-3" href="../../inventory/master-barang/index.html">
 															<span class="menu-bullet">
 																<span class="bullet bullet-dot"></span>
 															</span>
@@ -361,7 +361,7 @@
 														</a>
 													</div>
 													<div class="menu-item">
-														<a class="menu-link active py-3" href="./index.html">
+														<a class="menu-link py-3" href="../../inventory/barang-kategori/index.html">
 															<span class="menu-bullet">
 																<span class="bullet bullet-dot"></span>
 															</span>
@@ -2175,7 +2175,7 @@
 								<!--begin::Page title-->
 								<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 									<!--begin::Title-->
-									<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Barang Kategori
+									<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">User
 									<!--begin::Separator-->
 									<span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
 									<!--end::Separator-->
@@ -2192,7 +2192,7 @@
 										</li>
 										<!--end::Item-->
 										<!--begin::Item-->
-										<li class="breadcrumb-item text-muted">Inventory</li>
+										<li class="breadcrumb-item text-muted">Manajemen Akses</li>
 										<!--end::Item-->
 										<!--begin::Item-->
 										<li class="breadcrumb-item">
@@ -2201,8 +2201,9 @@
 										<!--end::Item-->
 										<!--begin::Item-->
 										<li class="breadcrumb-item text-muted">
-                                            <a href="./index.html" class="text-muted text-hover-primary">Barang Kategori</a>
+                                            <a href="./index.html" class="text-muted text-hover-primary">User</a>
                                         </li>
+										<!--end::Item-->
 										<!--end::Item-->
 										<!--begin::Item-->
 										<li class="breadcrumb-item">
@@ -2211,7 +2212,7 @@
 										<!--end::Item-->
 										<!--begin::Item-->
 										<li class="breadcrumb-item text-dark">
-                                            <a href="./create.html" class="text-hover-primary">Tambah</a>
+                                            <a href="./index.html" class="text-hover-primary">Tambah</a>
                                         </li>
 										<!--end::Item-->
 									</ul>
@@ -2328,7 +2329,7 @@
 								<!--begin::Row-->
                                 <div class="card shadow-sm">
                                     <div class="card-header">
-                                        <h3 class="card-title">Tambah Barang Kategori</h3>
+                                        <h3 class="card-title">Tambah User</h3>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -2336,21 +2337,24 @@
                                                 <form action="">
                                                     <div class="row">
                                                         <div class="col-md-6 mb-10">
-                                                            <label class="required form-label">Nama Kategori</label>
+                                                            <label class="required form-label">Username</label>
                                                             <input type="text" class="form-control" autocomplete="off"/>
                                                         </div>
                                                         <div class="col-md-6 mb-10">
-                                                            <label class="form-label">Nama Parent</label>
+                                                            <label class="required form-label">Email</label>
+                                                            <input type="text" class="form-control" autocomplete="off"/>
+                                                        </div>
+                                                        <div class="col-md-6 mb-10">
+                                                            <label class="required form-label">Role</label>
                                                             <select class="form-select">
-                                                                <option>Pilih Parent</option>
-                                                                <option value="1">Teknologi</option>
-                                                                <option value="2">Computers</option>
-                                                                <option value="3">Shirt</option>
+                                                                <option>Pilih Kategori</option>
+                                                                <option value="1">Admin</option>
+                                                                <option value="2">Sales</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-12 mb-10">
-                                                            <label class="form-label">Dekripsi</label>
-                                                            <textarea class="form-control" autocomplete="off" rows="3"></textarea>
+                                                        <div class="col-md-6 mb-10">
+                                                            <label class="required form-label">Phone Number</label>
+                                                            <input type="number" class="form-control" autocomplete="off"/>
                                                         </div>
                                                     </div>
                                                     <button type="submit" class="btn btn-success">Simpan</button>
@@ -5173,17 +5177,6 @@
                 "scrollY": "500px",
                 "scrollCollapse": true
             });
-            $(".datepicker").daterangepicker({
-                    singleDatePicker: true,
-                    todayHighlight: true,
-                    orientation: "bottom left",
-                    autoclose : true,
-                    language : 'id',
-                    locale: {
-                        format : 'DD-MM-YYYY'
-                    }            
-                }
-            );
         </script>
 		<!--end::Javascript-->
 	</body>

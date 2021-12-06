@@ -23,8 +23,11 @@
 		<!--begin::Global Stylesheets Bundle(used by all pages)-->
 		<link href="../../../assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="../../../assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="../../../assets/plugins/custom/bootstrap-switch/css/bootstrap4-toggle.min.css" rel="stylesheet" type="text/css" />
+		
         <link href="../../../assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css"/>
 		<!--end::Global Stylesheets Bundle-->
+		<link href="../../../assets/css/custom.css" rel="stylesheet" type="text/css" />
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
@@ -80,8 +83,8 @@
 										<span class="menu-title">Dashboard</span>
 									</a>
 								</div>
-								<div data-kt-menu-trigger="click" class="menu-item menu-accordion pt-8 hover showing">
-									<span class="menu-link active">
+								<div data-kt-menu-trigger="click" class="menu-item menu-accordion pt-8">
+									<span class="menu-link">
 										<span class="menu-icon">
 											<!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm007.svg-->
 											<span class="svg-icon svg-icon-2">
@@ -96,17 +99,17 @@
 										<span class="menu-title">Inventory</span>
 										<span class="menu-arrow"></span>
 									</span>
-									<div class="menu-sub menu-sub-accordion menu-active-bg show">
+									<div class="menu-sub menu-sub-accordion">
 										<div class="menu-item">
-											<a class="menu-link" href="../master-barang/index.html">
+											<a class="menu-link active" href="../../inventory/master-barang/index.html">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
 												<span class="menu-title">Master Barang</span>
 											</a>
 										</div>
-										<div class="menu-item active">
-											<a class="menu-link active" href="./index.html">
+										<div class="menu-item">
+											<a class="menu-link" href="../../inventory/barang-kategori/index.html">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
@@ -256,8 +259,8 @@
 										</div>
 									</div>
 								</div>
-								<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-									<span class="menu-link">
+								<div data-kt-menu-trigger="click" class="menu-item menu-accordion hover showing">
+									<span class="menu-link active">
 										<span class="menu-icon">
 											<!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
 											<span class="svg-icon svg-icon-2">
@@ -271,9 +274,9 @@
 										<span class="menu-title">Manajemen Akses</span>
 										<span class="menu-arrow"></span>
 									</span>
-									<div class="menu-sub menu-sub-accordion menu-active-bg">
+									<div class="menu-sub menu-sub-accordion menu-active-bg show">
 										<div class="menu-item">
-											<a class="menu-link" href="#">
+											<a class="menu-link active" href="./index.html">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
@@ -353,7 +356,7 @@
 												</span>
 												<div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
 													<div class="menu-item">
-														<a class="menu-link py-3" href="../master-barang/index.html">
+														<a class="menu-link active py-3" href="../../inventory/master-barang/index.html">
 															<span class="menu-bullet">
 																<span class="bullet bullet-dot"></span>
 															</span>
@@ -361,7 +364,7 @@
 														</a>
 													</div>
 													<div class="menu-item">
-														<a class="menu-link active py-3" href="./index.html">
+														<a class="menu-link py-3" href="../../inventory/barang-kategori/index.html">
 															<span class="menu-bullet">
 																<span class="bullet bullet-dot"></span>
 															</span>
@@ -2175,7 +2178,7 @@
 								<!--begin::Page title-->
 								<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 									<!--begin::Title-->
-									<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Barang Kategori
+									<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Kelola Data Supplier
 									<!--begin::Separator-->
 									<span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
 									<!--end::Separator-->
@@ -2192,17 +2195,7 @@
 										</li>
 										<!--end::Item-->
 										<!--begin::Item-->
-										<li class="breadcrumb-item text-muted">Inventory</li>
-										<!--end::Item-->
-										<!--begin::Item-->
-										<li class="breadcrumb-item">
-											<span class="bullet bg-gray-200 w-5px h-2px"></span>
-										</li>
-										<!--end::Item-->
-										<!--begin::Item-->
-										<li class="breadcrumb-item text-muted">
-                                            <a href="./index.html" class="text-muted text-hover-primary">Barang Kategori</a>
-                                        </li>
+										<li class="breadcrumb-item text-muted">Supplier</li>
 										<!--end::Item-->
 										<!--begin::Item-->
 										<li class="breadcrumb-item">
@@ -2211,7 +2204,7 @@
 										<!--end::Item-->
 										<!--begin::Item-->
 										<li class="breadcrumb-item text-dark">
-                                            <a href="./create.html" class="text-hover-primary">Tambah</a>
+                                            <a href="./index.html" class="text-hover-primary">Kelola Data Supplier</a>
                                         </li>
 										<!--end::Item-->
 									</ul>
@@ -2328,34 +2321,99 @@
 								<!--begin::Row-->
                                 <div class="card shadow-sm">
                                     <div class="card-header">
-                                        <h3 class="card-title">Tambah Barang Kategori</h3>
+                                        <h3 class="card-title">Kelola Data Supplier</h3>
+                                        <div class="card-toolbar">
+                                            <a href="./create.html" class="btn btn-sm btn-primary">
+                                                Tambah Data
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
-                                                <form action="">
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-10">
-                                                            <label class="required form-label">Nama Kategori</label>
-                                                            <input type="text" class="form-control" autocomplete="off"/>
-                                                        </div>
-                                                        <div class="col-md-6 mb-10">
-                                                            <label class="form-label">Nama Parent</label>
-                                                            <select class="form-select">
-                                                                <option>Pilih Parent</option>
-                                                                <option value="1">Teknologi</option>
-                                                                <option value="2">Computers</option>
-                                                                <option value="3">Shirt</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-12 mb-10">
-                                                            <label class="form-label">Dekripsi</label>
-                                                            <textarea class="form-control" autocomplete="off" rows="3"></textarea>
-                                                        </div>
+                                                <div class="d-flex align-items-center">
+                                                    <!--begin::Input group-->
+                                                    <div class="position-relative w-md-400px me-md-2">
+                                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                        <span class="svg-icon svg-icon-3 svg-icon-gray-500 position-absolute top-50 translate-middle ms-6">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black"></rect>
+                                                                <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <!--end::Svg Icon-->
+                                                        <input type="text" class="form-control form-control-solid ps-10" name="search" value="" placeholder="Nama Supplier">
                                                     </div>
-                                                    <button type="submit" class="btn btn-success">Simpan</button>
-                                                    <a href="./index.html" class="btn btn-warning">Kembali</a>
-                                                </form>
+                                                    <!--end::Input group-->
+                                                    <!--begin:Action-->
+                                                    <div class="d-flex align-items-center">
+                                                        <button type="submit" class="btn btn-primary me-5">Search</button>
+                                                    </div>
+                                                    <!--end:Action-->
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 mt-5">
+                                                <table id="kt_datatable_example_1" class="table table-striped table-row-bordered gy-7 gs-7">
+                                                    <thead>
+                                                        <tr class="fw-bold fs-6">
+                                                            <th>Name</th>
+                                                            <th>Email</th>
+                                                            <th>Phone Number</th>
+                                                            <th>Status</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Rock Real</td>
+                                                            <td>admin@example.com</td>                                                            
+                                                            <td>081122334455</td>
+                                                            <td>
+                                                                <input type="checkbox" checked data-toggle="toggle" data-size="sm" data-on="Aktif" data-off="Nonaktif">
+                                                            </td>
+                                                            <td>
+                                                                <a href="#" class="badge badge-success p-3">
+                                                                    <i class="fas fa-pen fs-5 text-white"></i>
+                                                                </a>
+                                                                <a href="#" class="badge badge-danger p-3">
+                                                                    <i class="fas fa-trash fs-5 text-white"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Rock Real</td>
+                                                            <td>admin@example.com</td>                                                            
+                                                            <td>081122334455</td>
+                                                            <td>
+                                                                <input type="checkbox" checked data-toggle="toggle" data-size="sm" data-on="Aktif" data-off="Nonaktif">
+                                                            </td>
+                                                            <td>
+                                                                <a href="#" class="badge badge-success p-3">
+                                                                    <i class="fas fa-pen fs-5 text-white"></i>
+                                                                </a>
+                                                                <a href="#" class="badge badge-danger p-3">
+                                                                    <i class="fas fa-trash fs-5 text-white"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Rock Real</td>
+                                                            <td>admin@example.com</td>                                                            
+                                                            <td>081122334455</td>
+                                                            <td>
+                                                                <input type="checkbox" checked data-toggle="toggle" data-size="sm" data-on="Aktif" data-off="Nonaktif">
+                                                            </td>
+                                                            <td>
+                                                                <a href="#" class="badge badge-success p-3">
+                                                                    <i class="fas fa-pen fs-5 text-white"></i>
+                                                                </a>
+                                                                <a href="#" class="badge badge-danger p-3">
+                                                                    <i class="fas fa-trash fs-5 text-white"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -5157,6 +5215,7 @@
 		<!--begin::Global Javascript Bundle(used by all pages)-->
 		<script src="../../../assets/plugins/global/plugins.bundle.js"></script>
 		<script src="../../../assets/js/scripts.bundle.js"></script>
+		<script src="../../../assets/plugins/custom/bootstrap-switch/js/bootstrap4-toggle.js"></script>
 		<!--end::Global Javascript Bundle-->
 		<!--begin::Page Vendors Javascript(used by this page)-->
 		<script src="../../../assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
@@ -5173,17 +5232,6 @@
                 "scrollY": "500px",
                 "scrollCollapse": true
             });
-            $(".datepicker").daterangepicker({
-                    singleDatePicker: true,
-                    todayHighlight: true,
-                    orientation: "bottom left",
-                    autoclose : true,
-                    language : 'id',
-                    locale: {
-                        format : 'DD-MM-YYYY'
-                    }            
-                }
-            );
         </script>
 		<!--end::Javascript-->
 	</body>
