@@ -25,6 +25,10 @@ export const asset = url => {
 }
 
 export const isActivePath = (expected) => {
+  if (expected.split('/').length > 2) {
+    return window.location.pathname.split('/')[2] === expected.split('/')[2];
+  }
+  
   return expected.replace('/', '') === window.location.pathname.split('/')[1];
 }
 
