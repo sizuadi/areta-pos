@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSanctum } from 'react-sanctum';
 import { Link } from 'react-router-dom';
+import Toggle from 'react-bootstrap-toggle';
 
 import api from '../../../Util/api'
 import Table from '../../../Components/PageComponent/Table';
@@ -10,6 +11,7 @@ import { defaultBlueprint } from '../../../Components/pagination.blueprint';
 
 export default function MasterBarang() {
   const {signOut} = useSanctum()
+  const [toggle, setToggle] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [paginated, setPaginated] = useState(defaultBlueprint);
@@ -108,8 +110,17 @@ export default function MasterBarang() {
             {item.description}
           </span>
         </td>
-        <td>
-          <span className="ms-2 badge badge-light-success fs-6 fw-bold">Aktif</span>
+        <td className="text-center">
+          <Toggle
+            style={{ width: '105px', height: '36px' }}
+            offstyle="danger"
+            onClick={() => setToggle(!toggle)}
+            size="sm"
+            handlestyle="light"
+            active={toggle}
+            on="Aktif"
+            off="Nonaktif"
+          />
         </td>
         <td className="text-end pe-2">
           <Link to="/" className="badge badge-success p-3 me-1" onClick={(e) => e.preventDefault()}>

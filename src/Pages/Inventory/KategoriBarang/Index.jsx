@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Toggle from 'react-bootstrap-toggle';
+
 import Table from '../../../Components/PageComponent/Table';
 import TablePagination from '../../../Components/PageComponent/TablePagination';
 import { dummyBlueprint } from '../../../Components/pagination.blueprint';
@@ -8,6 +10,7 @@ export default function Kategori() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState(dummyBlueprint);
+  const [toggle, setToggle] = useState(true);
 
   const dummyData = [
     {
@@ -83,7 +86,7 @@ export default function Kategori() {
       }));
 
       setLoading(false);
-    }, 3000);
+    }, 500);
 
     return () => {
       clearTimeout(timer);
@@ -119,7 +122,16 @@ export default function Kategori() {
           </span>
         </td>
         <td className="text-center">
-          <span className="ms-2 badge badge-success fs-6 fw-bold">Aktif</span>
+          <Toggle
+            style={{ width: '105px', height: '36px' }}
+            offstyle="danger"
+            onClick={() => setToggle(!toggle)}
+            size="sm"
+            handlestyle="light"
+            active={toggle}
+            on="Aktif"
+            off="Nonaktif"
+          />
         </td>
         <td className="text-end pe-2">
           <Link to="/" className="badge badge-success p-3 me-1" onClick={(e) => e.preventDefault()}>
