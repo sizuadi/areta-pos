@@ -1,32 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { useSanctum } from 'react-sanctum';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Table from '../../../Components/PageComponent/Table';
+import TablePagination from '../../../Components/PageComponent/TablePagination';
+import { dummyBlueprint } from '../../../Components/pagination.blueprint';
 
-import api from '../../Util/api'
-import Table from '../../Components/PageComponent/Table';
-import { asset, rupiah } from '../../Util/commonHelpers';
-import TablePagination from '../../Components/PageComponent/TablePagination';
-import { defaultBlueprint } from '../../Components/pagination.blueprint';
-
-export default function MasterBarang() {
-  const {signOut} = useSanctum()
-  const [isLoading, setIsLoading] = useState(true);
+export default function Kategori() {
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [paginated, setPaginated] = useState(defaultBlueprint);
-  const [formInput, setFormInput] = useState({search: '', length: 5});
+  const [items, setItems] = useState(dummyBlueprint);
 
+  const dummyData = [
+    {
+      "id": 1,
+      "name": "Standar",
+      "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque, suscipit!",
+      "created_at": "2021-10-27T15:06:52.000000Z",
+      "updated_at": "2021-10-27T15:06:52.000000Z",
+      "parent": null
+    },
+    {
+      "id": 2,
+      "name": "Middle",
+      "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi, laudantium.", 
+      "created_at": "2021-10-27T15:07:12.000000Z",
+      "updated_at": "2021-10-27T15:07:12.000000Z",
+      "parent": {
+        "id": 1,
+        "name": "Standar",
+        "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque, suscipit!",
+        "created_at": "2021-10-27T15:06:52.000000Z",
+        "updated_at": "2021-10-27T15:06:52.000000Z",
+        "parent": null
+      }
+    },
+    {
+      "id": 3,
+      "name": "Advance",
+      "description": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus, praesentium?", 
+      "created_at": "2021-10-27T15:07:12.000000Z",
+      "updated_at": "2021-10-27T15:07:12.000000Z",
+      "parent": {
+        "id": 1,
+        "name": "Standar",
+        "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque, suscipit!",
+        "created_at": "2021-10-27T15:06:52.000000Z",
+        "updated_at": "2021-10-27T15:06:52.000000Z",
+        "parent": null
+      },
+    },
+  ]
+  
   const tableHeader = [
     {
-      title: "Nama Produk",
-      className: "ps-4 min-w-300px rounded-start",
+      title: "Nama Kategori",
+      className: "ps-4 rounded-start",
     },
     {
-      title: "Stok",
-      className: "min-w-125px",
-    },
-    {
-      title: "Harga",
-      className: "min-w-125px",
+      title: "Parent",
+      className: "",
     },
     {
       title: "Deskripsi",
@@ -34,7 +65,7 @@ export default function MasterBarang() {
     },
     {
       title: "Status",
-      className: "",
+      className: "text-center"
     },
     {
       title: "",
@@ -42,74 +73,53 @@ export default function MasterBarang() {
     },
   ]
 
-  useEffect(() => {    
-    setIsLoading(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setItems(prev => ({
+        ...prev,
+        to: 3,
+        total: 3,
+        data: dummyData,
+      }));
 
-    const abortController = new AbortController();
-
-    api().get(`/api/products?page=${currentPage}`, {
-      signal: abortController.signal,
-      params: formInput,
-    }).then(response => {
-      setPaginated(response.data);
-      setIsLoading(false);
-    }).catch(err => {
-      if (err.response?.status === 401) {
-        signOut();
-      }
-    });
+      setLoading(false);
+    }, 3000);
 
     return () => {
-      abortController.abort();
-    };
-  }, [currentPage, signOut, formInput]);
-
+      clearTimeout(timer);
+    }
+  });
+  
   const searchHandler = (e) => {
-    let searchValue = document.getElementById('search').value;
-    
-    setCurrentPage(1);
-    setFormInput(prevState => ({...prevState, search: searchValue}));
+    //
   }
 
   const pageLength = e => {
-    e.persist();
-
-    setFormInput(prevState => ({...prevState, length: e.target.value}));
+    //
   }
 
-  let products = paginated.data.length === 0 ? 
+  let content = items.data.length === 0 ? 
   <tr>
     <td colSpan={tableHeader.length} className="text-center">
       <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">Barang tidak ditemukan.</span>
     </td>
   </tr> :
-  paginated.data.map((item, index) => {
+  items.data.map((item, index) => {
     return (
       <tr key={index}>
-        <td className="ps-2">
-          <div className="d-flex align-items-center">
-            <div className="symbol symbol-50px me-5">
-              <img src={asset("assets/media/products/box.png")} className="h-75 align-self-end" alt="product" />
-            </div>
-            <div className="d-flex justify-content-start flex-column">
-              <span className="text-dark fw-bolder text-hover-primary cursor-pointer mb-1 fs-6">{item.name}</span>
-              <span className="text-muted fw-bold text-muted d-block fs-7">{item.category.name}</span>
-            </div>
-          </div>
+        <td className="ps-4">
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.name}</span>
         </td>
         <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.id}</span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.parent ? item.parent.name : '-'}</span>
         </td>
         <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{rupiah(item.price)}</span>
-        </td>
-        <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6 text-truncate" style={{maxWidth: '300px'}}>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6 text-truncate" style={{maxWidth: '300px'}} title={item.description}>
             {item.description}
           </span>
         </td>
-        <td>
-          <span className="ms-2 badge badge-light-success fs-6 fw-bold">Aktif</span>
+        <td className="text-center">
+          <span className="ms-2 badge badge-success fs-6 fw-bold">Aktif</span>
         </td>
         <td className="text-end pe-2">
           <Link to="/" className="badge badge-success p-3 me-1" onClick={(e) => e.preventDefault()}>
@@ -122,13 +132,13 @@ export default function MasterBarang() {
       </tr>
     )
   })
-
+  
   return (
     <>
       <div className='toolbar' id='kt_toolbar'>
         <div id='kt_toolbar_container' className='container-fluid d-flex flex-stack'>
           <div data-kt-swapper='true' data-kt-swapper-mode='prepend' data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" className='page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0'>
-            <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Master Barang</h1>
+            <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Kategori Barang</h1>
             <span className='h-20px border-gray-200 border-start ms-3 mx-2' />
             <small className='text-muted fs-7 fw-bold my-1 ms-1'>List Page</small>
           </div>
@@ -146,29 +156,29 @@ export default function MasterBarang() {
                       <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black"></path>
                     </svg>
                   </span>
-                  <input type="text" className="form-control form-control-solid ps-10" name="search" id="search" placeholder="Nama Barang"/>
+                  <input type="text" className="form-control form-control-solid ps-10" name="search" id="search" placeholder="Nama Kategori"/>
                 </div>
                 <div className="d-flex align-items-center">
                   <button className="btn btn-light text-hover-primary me-5" onClick={searchHandler}>Cari</button>
                 </div>
               </div>
               <div className="card-toolbar">
-                <button type="button" className="btn btn-primary">
-                  Tambah Barang
-                </button>
+                <Link to="/" replace={true} className="btn btn-primary">
+                  Tambah Kategori
+                </Link>
               </div>
             </div>
             <div className="card-body py-3">
               <div className="row">
                 <div className="col-12 mt-4">
                   <div className="table-responsive">
-                    <Table loadingState={isLoading} tableHeader={tableHeader} tableBody={products} />
+                    <Table loadingState={loading} tableHeader={tableHeader} tableBody={content} />
                   </div>
-                  <TablePagination 
-                    loadingState={isLoading}
-                    paginationApi={paginated}
+                  <TablePagination
+                    loadingState={loading}
+                    paginationApi={items}
                     currentPage={currentPage}
-                    loadingSetter={setIsLoading}
+                    loadingSetter={setLoading}
                     currentPageSetter={setCurrentPage}
                     pageLengthSetter={pageLength}
                   />
