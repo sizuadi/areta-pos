@@ -1,69 +1,101 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Toggle from 'react-bootstrap-toggle';
 
 import Table from '../../../Components/PageComponent/Table';
 import TablePagination from '../../../Components/PageComponent/TablePagination';
 import { dummyBlueprint } from '../../../Components/pagination.blueprint';
 
-export default function Kategori() {
+export default function Konversi () {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState(dummyBlueprint);
-  const [toggle, setToggle] = useState(true);
 
   const dummyData = [
     {
-      "id": 1,
-      "name": "Standar",
-      "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque, suscipit!",
-      "created_at": "2021-10-27T15:06:52.000000Z",
-      "updated_at": "2021-10-27T15:06:52.000000Z",
-      "parent": null
-    },
-    {
-      "id": 2,
-      "name": "Middle",
-      "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi, laudantium.", 
-      "created_at": "2021-10-27T15:07:12.000000Z",
-      "updated_at": "2021-10-27T15:07:12.000000Z",
-      "parent": {
-        "id": 1,
-        "name": "Standar",
-        "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque, suscipit!",
-        "created_at": "2021-10-27T15:06:52.000000Z",
-        "updated_at": "2021-10-27T15:06:52.000000Z",
-        "parent": null
-      }
-    },
-    {
-      "id": 3,
-      "name": "Advance",
-      "description": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus, praesentium?", 
-      "created_at": "2021-10-27T15:07:12.000000Z",
-      "updated_at": "2021-10-27T15:07:12.000000Z",
-      "parent": {
-        "id": 1,
-        "name": "Standar",
-        "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque, suscipit!",
-        "created_at": "2021-10-27T15:06:52.000000Z",
-        "updated_at": "2021-10-27T15:06:52.000000Z",
-        "parent": null
+      id: 535,
+      name: "Provident nobis delectus.",
+      description: "Hatter continued, 'in this way:-- \"Up above the world you fly, Like.",
+      price: "6179481",
+      category_id: 3,
+      created_at: "2021-12-06T06:27:32.000000Z",
+      updated_at: "2021-12-06T06:27:32.000000Z",
+      stock_awal: {
+        id: 1,
+        jumlah: 5,
+        satuan: "Pack",
+        created_at: "2021-10-27T15:07:12.000000Z",
+        updated_at: "2021-10-27T15:07:12.000000Z",
       },
+      konversi: {
+        id: 1,
+        jumlah: 10,
+        satuan: "Pcs",
+        created_at: "2021-10-27T15:07:12.000000Z",
+        updated_at: "2021-10-27T15:07:12.000000Z",
+      },
+      image: null,
     },
-  ]
+    {
+      id: 536,
+      name: "Ex aut.",
+      description: "Then it got down off the fire, licking her paws and washing her.",
+      price: "6577866",
+      category_id: 1,
+      created_at: "2021-12-06T06:27:32.000000Z",
+      updated_at: "2021-12-06T06:27:32.000000Z",
+      stock_awal: {
+        id: 2,
+        jumlah: 10,
+        satuan: "Lusin",
+        created_at: "2021-10-27T15:06:52.000000Z",
+        updated_at: "2021-10-27T15:06:52.000000Z",
+      },
+      konversi: {
+        id: 2,
+        jumlah: 120,
+        satuan: "Pcs",
+        created_at: "2021-10-27T15:06:52.000000Z",
+        updated_at: "2021-10-27T15:06:52.000000Z",
+      },
+      image: null,
+    },
+    {
+      id: 537,
+      name: "Sed cumque.",
+      description: "Mabel! I'll try if I only wish it was,' the March Hare. 'I didn't.",
+      price: "2184461",
+      category_id: 3,
+      created_at: "2021-12-06T06:27:32.000000Z",
+      updated_at: "2021-12-06T06:27:32.000000Z",
+      stock_awal: {
+        id: 3,
+        jumlah: 7,
+        satuan: "Box",
+        created_at: "2021-10-27T15:07:12.000000Z",
+        updated_at: "2021-10-27T15:07:12.000000Z",
+      },
+      konversi: {
+        id: 3,
+        jumlah: 35,
+        satuan: "Pcs",
+        created_at: "2021-10-27T15:07:12.000000Z",
+        updated_at: "2021-10-27T15:07:12.000000Z",
+      },
+      image: null,
+    },
+  ];
   
   const tableHeader = [
     {
-      title: "Nama Kategori",
+      title: "Barang",
       className: "ps-4 rounded-start",
     },
     {
-      title: "Parent",
+      title: "Jumlah Awal",
       className: "",
     },
     {
-      title: "Deskripsi",
+      title: "Jumlah Konversi",
       className: "min-w-200px"
     },
     {
@@ -72,7 +104,7 @@ export default function Kategori() {
     },
     {
       title: "",
-      className: "min-w-200px text-end rounded-end",
+      className: "min-w-200px text-end rounded-end"
     },
   ]
 
@@ -114,24 +146,13 @@ export default function Kategori() {
           <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.name}</span>
         </td>
         <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.parent ? item.parent.name : '-'}</span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{`${item.stock_awal.jumlah} ${item.stock_awal.satuan}`}</span>
         </td>
         <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6 text-truncate" style={{maxWidth: '300px'}} title={item.description}>
-            {item.description}
-          </span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{`${item.konversi.jumlah} ${item.konversi.satuan}`}</span>
         </td>
         <td className="text-center">
-          <Toggle
-            style={{ width: '105px', height: '36px' }}
-            offstyle="danger"
-            onClick={() => setToggle(!toggle)}
-            size="sm"
-            handlestyle="light"
-            active={toggle}
-            on="Aktif"
-            off="Nonaktif"
-          />
+          <span className="ms-2 badge badge-light-success fs-6 fw-bold">Aktif</span>
         </td>
         <td className="text-end pe-2">
           <Link to="/" className="badge badge-success p-3 me-1" onClick={(e) => e.preventDefault()}>
@@ -150,7 +171,7 @@ export default function Kategori() {
       <div className='toolbar' id='kt_toolbar'>
         <div id='kt_toolbar_container' className='container-fluid d-flex flex-stack'>
           <div data-kt-swapper='true' data-kt-swapper-mode='prepend' data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" className='page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0'>
-            <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Kategori Barang</h1>
+            <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Konversi</h1>
             <span className='h-20px border-gray-200 border-start ms-3 mx-2' />
             <small className='text-muted fs-7 fw-bold my-1 ms-1'>List Page</small>
           </div>
@@ -168,15 +189,15 @@ export default function Kategori() {
                       <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black"></path>
                     </svg>
                   </span>
-                  <input type="text" className="form-control form-control-solid ps-10" name="search" id="search" placeholder="Nama Kategori"/>
+                  <input type="text" className="form-control form-control-solid ps-10" name="search" id="search" placeholder="Nama Barang"/>
                 </div>
                 <div className="d-flex align-items-center">
                   <button className="btn btn-light text-hover-primary me-5" onClick={searchHandler}>Cari</button>
                 </div>
               </div>
               <div className="card-toolbar">
-                <Link to="/inventory/kategori-barang/create" replace={true} className="btn btn-primary">
-                  Tambah Kategori
+                <Link to="/inventory/konversi/create" replace={true} className="btn btn-primary">
+                  Tambah Data
                 </Link>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Create() {
+export const Create = () => {
   return (
     <>
     <div className='toolbar' id='kt_toolbar'>
@@ -66,7 +66,7 @@ export default function Create() {
                       <input type="file" className="form-control" />
                     </div>
                     <div className="col-md-4 mb-10">
-                      <label className="required form-label">Dekripsi</label>
+                      <label className="form-label">Dekripsi</label>
                       <textarea className="form-control" autoComplete="off" rows={3} defaultValue={""} />
                     </div>
                   </div>

@@ -6,7 +6,7 @@ import Table from '../../../Components/PageComponent/Table';
 import TablePagination from '../../../Components/PageComponent/TablePagination';
 import { dummyBlueprint } from '../../../Components/pagination.blueprint';
 
-export default function Kategori() {
+export default function Users() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState(dummyBlueprint);
@@ -15,56 +15,40 @@ export default function Kategori() {
   const dummyData = [
     {
       "id": 1,
-      "name": "Standar",
-      "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque, suscipit!",
+      "username": "admin",
+      "email": "example@mail.com",
+      "role": "admin",
+      "mobile": "+62 1827312",
       "created_at": "2021-10-27T15:06:52.000000Z",
       "updated_at": "2021-10-27T15:06:52.000000Z",
-      "parent": null
     },
     {
       "id": 2,
-      "name": "Middle",
-      "description": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi, laudantium.", 
+      "username": "basic.user",
+      "email": "example@mail.com", 
+      "role": "admin",
+      "mobile": "+62 1827312",
       "created_at": "2021-10-27T15:07:12.000000Z",
       "updated_at": "2021-10-27T15:07:12.000000Z",
-      "parent": {
-        "id": 1,
-        "name": "Standar",
-        "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque, suscipit!",
-        "created_at": "2021-10-27T15:06:52.000000Z",
-        "updated_at": "2021-10-27T15:06:52.000000Z",
-        "parent": null
-      }
-    },
-    {
-      "id": 3,
-      "name": "Advance",
-      "description": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus, praesentium?", 
-      "created_at": "2021-10-27T15:07:12.000000Z",
-      "updated_at": "2021-10-27T15:07:12.000000Z",
-      "parent": {
-        "id": 1,
-        "name": "Standar",
-        "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque, suscipit!",
-        "created_at": "2021-10-27T15:06:52.000000Z",
-        "updated_at": "2021-10-27T15:06:52.000000Z",
-        "parent": null
-      },
     },
   ]
   
   const tableHeader = [
     {
-      title: "Nama Kategori",
+      title: "Username",
       className: "ps-4 rounded-start",
     },
     {
-      title: "Parent",
+      title: "Email",
       className: "",
     },
     {
-      title: "Deskripsi",
-      className: "min-w-200px"
+      title: "Role",
+      className: ""
+    },
+    {
+      title: "Mobile",
+      className: ""
     },
     {
       title: "Status",
@@ -80,8 +64,8 @@ export default function Kategori() {
     const timer = setTimeout(() => {
       setItems(prev => ({
         ...prev,
-        to: 3,
-        total: 3,
+        to: 2,
+        total: 2,
         data: dummyData,
       }));
 
@@ -111,15 +95,16 @@ export default function Kategori() {
     return (
       <tr key={index}>
         <td className="ps-4">
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.name}</span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.username}</span>
         </td>
         <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.parent ? item.parent.name : '-'}</span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.email}</span>
         </td>
         <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6 text-truncate" style={{maxWidth: '300px'}} title={item.description}>
-            {item.description}
-          </span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.role}</span>
+        </td>
+        <td>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.mobile}</span>
         </td>
         <td className="text-center">
           <Toggle
@@ -150,7 +135,7 @@ export default function Kategori() {
       <div className='toolbar' id='kt_toolbar'>
         <div id='kt_toolbar_container' className='container-fluid d-flex flex-stack'>
           <div data-kt-swapper='true' data-kt-swapper-mode='prepend' data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" className='page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0'>
-            <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Kategori Barang</h1>
+            <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Data Users</h1>
             <span className='h-20px border-gray-200 border-start ms-3 mx-2' />
             <small className='text-muted fs-7 fw-bold my-1 ms-1'>List Page</small>
           </div>
@@ -168,15 +153,15 @@ export default function Kategori() {
                       <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black"></path>
                     </svg>
                   </span>
-                  <input type="text" className="form-control form-control-solid ps-10" name="search" id="search" placeholder="Nama Kategori"/>
+                  <input type="text" className="form-control form-control-solid ps-10" name="search" id="search" placeholder="Username / Email"/>
                 </div>
                 <div className="d-flex align-items-center">
                   <button className="btn btn-light text-hover-primary me-5" onClick={searchHandler}>Cari</button>
                 </div>
               </div>
               <div className="card-toolbar">
-                <Link to="/inventory/kategori-barang/create" replace={true} className="btn btn-primary">
-                  Tambah Kategori
+                <Link to="/manajemen-akses/users/create" replace={true} className="btn btn-primary">
+                  Tambah User
                 </Link>
               </div>
             </div>

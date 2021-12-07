@@ -33,7 +33,7 @@ export const menuData = [
       },
       {
         title: "Barang Masuk",
-        url: "/not-set",
+        url: "/inventory/barang-masuk",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -41,7 +41,7 @@ export const menuData = [
       },
       {
         title: "Barang Keluar",
-        url: "/not-set",
+        url: "/inventory/barang-keluar",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -49,7 +49,7 @@ export const menuData = [
       },
       {
         title: "Barang Reject",
-        url: "/not-set",
+        url: "/inventory/barang-reject",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -57,7 +57,7 @@ export const menuData = [
       },
       {
         title: "Barang Retur",
-        url: "/not-set",
+        url: "/inventory/barang-retur",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -65,7 +65,7 @@ export const menuData = [
       },
       {
         title: "Konversi",
-        url: "/not-set",
+        url: "/inventory/konversi",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -73,7 +73,7 @@ export const menuData = [
       },
       {
         title: "Stok Opname",
-        url: "/not-set",
+        url: "/inventory/stock-opname",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -101,7 +101,7 @@ export const menuData = [
     subMenu: [
       {
         title: "Harga Beli",
-        url: "/not-set",
+        url: "/harga/harga-beli",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -109,7 +109,7 @@ export const menuData = [
       },
       {
         title: "Harga Jual",
-        url: "/not-set",
+        url: "/harga/harga-jual",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -117,7 +117,7 @@ export const menuData = [
       },
       {
         title: "Margin",
-        url: "/not-set",
+        url: "/harga/margin",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -159,7 +159,7 @@ export const menuData = [
     subMenu: [
       {
         title: "Kelola Data Supplier",
-        url: "/not-set",
+        url: "/supplier/data-supplier",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -167,7 +167,7 @@ export const menuData = [
       },
       {
         title: "Permintaan Barang",
-        url: "/not-set",
+        url: "/supplier/permintaan-barang",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -175,7 +175,7 @@ export const menuData = [
       },
       {
         title: "Return Barang",
-        url: "/not-set",
+        url: "/supplier/retur-barang",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -201,7 +201,7 @@ export const menuData = [
     subMenu: [
       {
         title: "User",
-        url: "/user",
+        url: "/manajemen-akses/users",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -209,7 +209,7 @@ export const menuData = [
       },
       {
         title: "Roles",
-        url: "/roles",
+        url: "/manajemen-akses/roles",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -217,7 +217,7 @@ export const menuData = [
       },
       {
         title: "Permission",
-        url: "/permission",
+        url: "/manajemen-akses/permissions",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
