@@ -68,11 +68,7 @@ export default function Sidebar() {
           data-kt-scroll-wrappers='#kt_aside_menu'
           data-kt-scroll-offset={0}
         >
-          <div
-            className='menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500'
-            id='#kt_aside_menu'
-            data-kt-menu='true'
-          >
+          <div className='menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500' id='#kt_aside_menu' data-kt-menu='true' >
             <div className='menu-item pb-8'>
               <CustomLink className={`menu-link`} to='/'>
                 <span className='menu-icon'>
@@ -100,7 +96,7 @@ export default function Sidebar() {
                     {menu.subMenu.map((subMenu, subIndex) => {
                       return (
                         <div className='menu-item' key={subIndex}>
-                          <CustomLink to={subMenu.url} className={`menu-link ${subMenu.sideBarLinkClass}`} >
+                          <CustomLink to={subMenu.url} className={`menu-link ${isActivePath(subMenu.url) && 'active'} ${subMenu.sideBarLinkClass}`} >
                             <span className='menu-bullet'>
                               <span className='bullet bullet-dot' />
                             </span>

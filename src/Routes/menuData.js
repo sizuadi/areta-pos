@@ -33,7 +33,7 @@ export const menuData = [
       },
       {
         title: "Barang Masuk",
-        url: "/not-set",
+        url: "/inventory/barang-masuk",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -41,7 +41,7 @@ export const menuData = [
       },
       {
         title: "Barang Keluar",
-        url: "/not-set",
+        url: "/inventory/barang-keluar",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -49,7 +49,7 @@ export const menuData = [
       },
       {
         title: "Barang Reject",
-        url: "/not-set",
+        url: "/inventory/barang-reject",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -57,7 +57,7 @@ export const menuData = [
       },
       {
         title: "Barang Retur",
-        url: "/not-set",
+        url: "/inventory/barang-retur",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -65,7 +65,7 @@ export const menuData = [
       },
       {
         title: "Konversi",
-        url: "/not-set",
+        url: "/inventory/konversi",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -73,7 +73,7 @@ export const menuData = [
       },
       {
         title: "Stok Opname",
-        url: "/not-set",
+        url: "/inventory/stock-opname",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -101,7 +101,7 @@ export const menuData = [
     subMenu: [
       {
         title: "Harga Beli",
-        url: "/not-set",
+        url: "/harga/harga-beli",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -109,7 +109,7 @@ export const menuData = [
       },
       {
         title: "Harga Jual",
-        url: "/not-set",
+        url: "/harga/harga-jual",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -117,7 +117,7 @@ export const menuData = [
       },
       {
         title: "Margin",
-        url: "/not-set",
+        url: "/harga/margin",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -145,8 +145,8 @@ export const menuData = [
     title: "Supplier",
     prefix: "supplier",
     icon: (
-      <span class="menu-icon">
-        <span class="svg-icon svg-icon-2">
+      <span className="menu-icon">
+        <span className="svg-icon svg-icon-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path opacity="0.3" d="M20 15H4C2.9 15 2 14.1 2 13V7C2 6.4 2.4 6 3 6H21C21.6 6 22 6.4 22 7V13C22 14.1 21.1 15 20 15ZM13 12H11C10.5 12 10 12.4 10 13V16C10 16.5 10.4 17 11 17H13C13.6 17 14 16.6 14 16V13C14 12.4 13.6 12 13 12Z" fill="black" />
             <path d="M14 6V5H10V6H8V5C8 3.9 8.9 3 10 3H14C15.1 3 16 3.9 16 5V6H14ZM20 15H14V16C14 16.6 13.5 17 13 17H11C10.5 17 10 16.6 10 16V15H4C3.6 15 3.3 14.9 3 14.7V18C3 19.1 3.9 20 5 20H19C20.1 20 21 19.1 21 18V14.7C20.7 14.9 20.4 15 20 15Z" fill="black" />
@@ -159,7 +159,7 @@ export const menuData = [
     subMenu: [
       {
         title: "Kelola Data Supplier",
-        url: "/not-set",
+        url: "/supplier/data-supplier",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -167,7 +167,7 @@ export const menuData = [
       },
       {
         title: "Permintaan Barang",
-        url: "/not-set",
+        url: "/supplier/permintaan-barang",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -175,7 +175,7 @@ export const menuData = [
       },
       {
         title: "Return Barang",
-        url: "/not-set",
+        url: "/supplier/retur-barang",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -187,8 +187,8 @@ export const menuData = [
     title: "Manajemen Akses",
     prefix: "manajemen-akses",
     icon: (
-      <span class="menu-icon">
-        <span class="svg-icon svg-icon-2">
+      <span className="menu-icon">
+        <span className="svg-icon svg-icon-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M6.28548 15.0861C7.34369 13.1814 9.35142 12 11.5304 12H12.4696C14.6486 12 16.6563 13.1814 17.7145 15.0861L19.3493 18.0287C20.0899 19.3618 19.1259 21 17.601 21H6.39903C4.87406 21 3.91012 19.3618 4.65071 18.0287L6.28548 15.0861Z" fill="black" />
             <rect opacity="0.3" x="8" y="3" width="8" height="8" rx="4" fill="black" />
@@ -201,7 +201,7 @@ export const menuData = [
     subMenu: [
       {
         title: "User",
-        url: "/user",
+        url: "/manajemen-akses/users",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -209,7 +209,7 @@ export const menuData = [
       },
       {
         title: "Roles",
-        url: "/roles",
+        url: "/manajemen-akses/roles",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",
@@ -217,7 +217,7 @@ export const menuData = [
       },
       {
         title: "Permission",
-        url: "/permission",
+        url: "/manajemen-akses/permissions",
         linkClass: "",
         titleClass: "",
         sideBarLinkClass: "",

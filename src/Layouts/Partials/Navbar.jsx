@@ -44,7 +44,7 @@ export default function Navbar() {
                         {menu.subMenu.map((subMenu, subIndex) => {
                           return (
                             <div className='menu-item' key={subIndex}>
-                              <CustomLink to={subMenu.url} className={'menu-link py-3 ' + subMenu.linkClass}>
+                              <CustomLink to={subMenu.url} className={`menu-link py-3 ${isActivePath(subMenu.url) && 'active'} ` + subMenu.linkClass }>
                                 <span className='menu-bullet'>
                                   <span className='bullet bullet-dot' />
                                 </span>

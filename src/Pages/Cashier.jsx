@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSanctum } from 'react-sanctum';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import '../Assets/custom.css';
+import ContentLoader from '../Components/PageComponent/ContentLoader';
 import { defaultBlueprint } from '../Components/pagination.blueprint';
 import api from '../Util/api';
 import { asset, rupiah } from '../Util/commonHelpers';
@@ -10,11 +12,9 @@ export default function Cashier() {
   const { signOut } = useSanctum();
   const [paginated, setPaginated] = useState(defaultBlueprint);
   const [loading, setLoading] = useState(true);
-  const [params, setParams] = useState({search: '', length: 12, page: 1});
+  const [params, setParams] = useState({search: '', length: 18, page: 1});
   
   useEffect(() => {
-    setLoading(true);
-
     const abortController = new AbortController();
 
     api().get(`/api/products`, {
@@ -22,13 +22,12 @@ export default function Cashier() {
       params: params,
     }).then(response => {
       setPaginated(prev => ({...prev, data: prev.data.concat(response.data.data)}));
-
       setLoading(false);
     }).catch(err => {
       if (err.response?.status === 401) {
         signOut();
       }
-    })
+    });
     
     if (window.document.body.classList.contains("toolbar-enabled")) {
       window.document.body.classList.remove("toolbar-enabled");
@@ -42,15 +41,19 @@ export default function Cashier() {
     }
   }, [params, signOut]);
 
-  const loadMoreHandler = e => {
-    e.persist();
-
+  const loadMoreHandler = () => {
     setParams(prev => ({...prev, page: prev.page + 1}));
   }
 
-  let content = paginated.data.map((item, index) => {
+  const searchHandler = () => {
+    let searchValue = document.getElementById('search').value;
+    
+    setParams(prev => ({search: searchValue, page: 1, length: prev.length}));
+  }
+
+  let content = !loading && paginated.data.map((item, index) => {
     return (
-      <div className="col-md-2 mt-5" key={index}>
+      <div className="col-sm-2 my-3" key={index}>
         <div className="card cursor-pointer shadow-sm">
           <div className="card-body p-0">
             <div className="overlay">
@@ -86,23 +89,35 @@ export default function Cashier() {
                           <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
                         </svg>
                       </span>
-                      <input type="text" className="form-control form-control-flush" name="search" placeholder="Your Search" />
+                      <input type="text" className="form-control form-control-flush" id="search" name="search" placeholder="Your Search" />
                     </div>
                   </div>
                   <div className="min-w-150px text-end">
-                    <button type="submit" className="btn btn-dark" id="kt_advanced_search_button_1">Search</button>
+                    <button className="btn btn-dark" id="kt_advanced_search_button_1" onClick={searchHandler}>Search</button>
                   </div>
                 </div>
               </div>
             </div>
             <div className="card">
-              <div className="card-body card-scroll card-body-product pt-0">
-                <div className="row">
-                  {!loading && content}
-                </div>
-              </div>
-              <div className="card-footer text-end">
-                <button className="btn btn-light text-hover-primary" onClick={loadMoreHandler}>Load more</button>
+              <div className="card-body card-scroll card-body-product pt-0" id="scrollable-card" onScroll={(e) => {
+                if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight) {  
+                  loadMoreHandler();
+                }
+              }}>
+                {!loading ? <InfiniteScroll
+                  className="row"
+                  scrollableTarget="scrollable-card"
+                  hasMore={paginated.to !== paginated.total}
+                  dataLength={paginated.data.length}
+                  pageStart={params.page}
+                  next={loadMoreHandler}
+                  refreshFunction={loadMoreHandler}
+                  loader={<ContentLoader />}
+                  pullDownToRefresh={true}
+                  pullDownToRefreshThreshold={1}
+                >
+                  {content}
+                </InfiniteScroll> : <ContentLoader />}
               </div>
             </div>
           </div>
@@ -116,19 +131,21 @@ export default function Cashier() {
                   <div className="flex-grow-2 me-2">
                     <a href="/" className="text-gray-800 fs-7 fw-bolder">
                       Smart Watch
-                    </a>								
+                    </a>
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 400.000</span>
                 </div>
@@ -139,16 +156,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 24.000.000</span>
                 </div>
@@ -159,16 +178,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 400.000</span>
                 </div>
@@ -179,16 +200,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 24.000.000</span>
                 </div>
@@ -199,16 +222,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 400.000</span>
                 </div>
@@ -219,16 +244,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 24.000.000</span>
                 </div>
@@ -239,16 +266,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 400.000</span>
                 </div>
@@ -259,16 +288,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 24.000.000</span>
                 </div>
@@ -279,16 +310,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 400.000</span>
                 </div>
@@ -299,16 +332,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 24.000.000</span>
                 </div>
@@ -319,16 +354,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 400.000</span>
                 </div>
@@ -339,16 +376,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 24.000.000</span>
                 </div>
@@ -359,16 +398,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 400.000</span>
                 </div>
@@ -379,16 +420,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 24.000.000</span>
                 </div>
@@ -399,16 +442,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 400.000</span>
                 </div>
@@ -419,16 +464,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 24.000.000</span>
                 </div>
@@ -439,16 +486,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 400.000</span>
                 </div>
@@ -459,16 +508,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 24.000.000</span>
                 </div>
@@ -479,16 +530,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 400.000</span>
                 </div>
@@ -499,16 +552,18 @@ export default function Cashier() {
                     </a>								
                   </div>
                   <div className="flex-grow-1 ms-4">
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-plus text-white" />
-                    </button>
-                    <input type="text" className="form-count" />
-                    <button className="btn-xs btn-success">
-                      <i className="fas fa-minus text-white" />
-                    </button>
-                    <button className="badge badge-danger border-0 ms-3">
-                      <i className="fas fa-trash text-white" />
-                    </button>
+                    <div className="input-group w-200px input-group-solid">
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-minus text-danger"></i>
+                      </button>
+                      <input type="text" className="form-control text-center"/>
+                      <button className="cursor-pointer input-group-text">
+                        <i className="fas fa-plus text-success"></i>
+                      </button>
+                      <button className="cursor-pointer input-group-text bg-danger">
+                        <i className="fas fa-trash text-white"></i>
+                      </button>
+                    </div>
                   </div>
                   <span className="fs-7 fw-bolder my-2">Rp. 24.000.000</span>
                 </div>
