@@ -1,31 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSanctum } from 'react-sanctum';
+import { deleteHandler } from '../../../Components/deleteHandler';
 
 import Table from '../../../Components/PageComponent/Table';
 import TablePagination from '../../../Components/PageComponent/TablePagination';
-import { dummyBlueprint } from '../../../Components/pagination.blueprint';
+import { defaultBlueprint } from '../../../Components/pagination.blueprint';
+import api from '../../../Util/api';
 
 export default function Roles() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [items, setItems] = useState(dummyBlueprint);
-
-  const dummyData = [
-    {
-      "id": 1,
-      "role": "admin",
-      "mobile": "+62 1827312",
-      "created_at": "2021-10-27T15:06:52.000000Z",
-      "updated_at": "2021-10-27T15:06:52.000000Z",
-    },
-    {
-      "id": 2,
-      "role": "admin",
-      "mobile": "+62 1827312",
-      "created_at": "2021-10-27T15:07:12.000000Z",
-      "updated_at": "2021-10-27T15:07:12.000000Z",
-    },
-  ]
+  const [items, setItems] = useState(defaultBlueprint);
+  const [params, setParams] = useState({length: 5, search: ""});
+  const { signOut } = useSanctum();
   
   const tableHeader = [
     {
@@ -39,47 +27,59 @@ export default function Roles() {
   ]
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setItems(prev => ({
-        ...prev,
-        to: 2,
-        total: 2,
-        data: dummyData,
-      }));
+    setLoading(true);
+    const abortController = new AbortController();
 
+    api().get(`api/roles?page=${currentPage}`, {
+      params: params,
+      signal: abortController.signal,
+    }).then(response => {
+      setItems(response.data.data);
       setLoading(false);
-    }, 500);
-
+    }).catch(err => {
+      if (err.response?.status === 401) {
+        signOut();
+      }
+    })
+    
     return () => {
-      clearTimeout(timer);
+      abortController.abort();
     }
-  });
+  }, [params, signOut, currentPage]);
   
   const searchHandler = (e) => {
-    //
+    let searchValue = document.getElementById('search').value;
+
+    setParams(prevState => ({...prevState, search: searchValue}));
   }
 
   const pageLength = e => {
-    //
+    e.persist();
+
+    setParams(prevState => ({...prevState, length: e.target.value}));
   }
 
   let content = items.data.length === 0 ? 
   <tr>
     <td colSpan={tableHeader.length} className="text-center">
-      <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">Barang tidak ditemukan.</span>
+      <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">Role tidak ditemukan.</span>
     </td>
   </tr> :
   items.data.map((item, index) => {
     return (
       <tr key={index}>
         <td className="ps-4">
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.role}</span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.name}</span>
         </td>
         <td className="text-end pe-2">
           <Link to="/" className="badge badge-success p-3 me-1" onClick={(e) => e.preventDefault()}>
             <i className="fas fa-pen fs-5 text-white"></i>
           </Link>
-          <Link to="/" className="badge badge-danger p-3" onClick={(e) => e.preventDefault()}>
+          <Link to="/" className="badge badge-danger p-3" onClick={(e) => {
+            e.preventDefault();
+
+            deleteHandler(item.id, setCurrentPage, 'roles');
+          }}>
             <i className="fas fa-trash fs-5 text-white"></i>
           </Link>
         </td>
