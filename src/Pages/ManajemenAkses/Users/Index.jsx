@@ -12,8 +12,8 @@ export default function Users() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState(defaultBlueprint);
-  const { signOut } = useSanctum();
   const [params, setParams] = useState({length: 5, search: ""});
+  const { signOut } = useSanctum();
   
   const tableHeader = [
     {
@@ -88,7 +88,7 @@ export default function Users() {
           }</span>
         </td>
         <td className="text-end pe-2">
-          <Link to="/" className="badge badge-success p-3 me-1" onClick={(e) => e.preventDefault()}>
+          <Link to={`/manajemen-akses/users/edit/${item.id}`} className="badge badge-success p-3 me-1">
             <i className="fas fa-pen fs-5 text-white"></i>
           </Link>
           <Link to="/" className="badge badge-danger p-3" onClick={(e) => {
