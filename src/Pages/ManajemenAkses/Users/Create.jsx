@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -61,6 +62,7 @@ export const Create = () => {
 
       navigate('/manajemen-akses/users', {replace: true});
     }).catch(err => {
+      
       window['toastr'].clear();
 
       if (err.response.status === 422) {
@@ -88,7 +90,7 @@ export const Create = () => {
 
     setFormInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   }
-
+  
   return (
     <>
     <div className='toolbar' id='kt_toolbar'>

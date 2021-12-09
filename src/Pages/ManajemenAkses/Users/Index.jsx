@@ -37,7 +37,6 @@ export default function Users() {
   useEffect(() => {
     setLoading(true);
     const abortController = new AbortController();
-
     api().get(`api/users?page=${currentPage}&relations=roles`, {
       params: params,
       signal: abortController.signal,
