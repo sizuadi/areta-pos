@@ -49,11 +49,11 @@ export default function MasterBarang() {
 
     const abortController = new AbortController();
 
-    api().get(`/api/products?page=${currentPage}`, {
+    api().get(`/api/product?page=${currentPage}`, {
       signal: abortController.signal,
       params: params,
     }).then(response => {
-      setPaginated(response.data);
+      setPaginated(response.data.data);
       setIsLoading(false);
     }).catch(err => {
       if (err.response?.status === 401) {
@@ -95,7 +95,7 @@ export default function MasterBarang() {
             </div>
             <div className="d-flex justify-content-start flex-column">
               <span className="text-dark fw-bolder text-hover-primary cursor-pointer mb-1 fs-6">{item.name}</span>
-              <span className="text-muted fw-bold text-muted d-block fs-7">{item.category.name}</span>
+              {/* <span className="text-muted fw-bold text-muted d-block fs-7">{item.category.name}</span> */}
             </div>
           </div>
         </td>
