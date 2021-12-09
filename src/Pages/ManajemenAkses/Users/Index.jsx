@@ -1,37 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Toggle from 'react-bootstrap-toggle';
+// import Toggle from 'react-bootstrap-toggle';
 
 import Table from '../../../Components/PageComponent/Table';
 import TablePagination from '../../../Components/PageComponent/TablePagination';
-import { dummyBlueprint } from '../../../Components/pagination.blueprint';
+import { defaultBlueprint } from '../../../Components/pagination.blueprint';
+import api from '../../../Util/api';
+import { useSanctum } from 'react-sanctum';
 
 export default function Users() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [items, setItems] = useState(dummyBlueprint);
-  const [toggle, setToggle] = useState(true);
-
-  const dummyData = [
-    {
-      "id": 1,
-      "username": "admin",
-      "email": "example@mail.com",
-      "role": "admin",
-      "mobile": "+62 1827312",
-      "created_at": "2021-10-27T15:06:52.000000Z",
-      "updated_at": "2021-10-27T15:06:52.000000Z",
-    },
-    {
-      "id": 2,
-      "username": "basic.user",
-      "email": "example@mail.com", 
-      "role": "admin",
-      "mobile": "+62 1827312",
-      "created_at": "2021-10-27T15:07:12.000000Z",
-      "updated_at": "2021-10-27T15:07:12.000000Z",
-    },
-  ]
+  const [items, setItems] = useState(defaultBlueprint);
+  const { signOut } = useSanctum();
+  const [params, setParams] = useState({length: 5, search: ""});
   
   const tableHeader = [
     {
@@ -46,14 +28,10 @@ export default function Users() {
       title: "Role",
       className: ""
     },
-    {
-      title: "Mobile",
-      className: ""
-    },
-    {
-      title: "Status",
-      className: "text-center"
-    },
+    // {
+    //   title: "Status",
+    //   className: "text-center"
+    // },
     {
       title: "",
       className: "min-w-200px text-end rounded-end",
@@ -61,52 +39,57 @@ export default function Users() {
   ]
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setItems(prev => ({
-        ...prev,
-        to: 2,
-        total: 2,
-        data: dummyData,
-      }));
+    setLoading(true);
+    const abortController = new AbortController();
 
+    api().get(`api/users?page=${currentPage}`, {
+      params: params,
+      signal: abortController.signal,
+    }).then(response => {
+      setItems(response.data.data);
       setLoading(false);
-    }, 500);
-
+    }).catch(err => {
+      if (err.response?.status === 401) {
+        signOut();
+      }
+    })
+    
     return () => {
-      clearTimeout(timer);
+      abortController.abort();
     }
-  });
+  }, [params, signOut, currentPage]);
   
-  const searchHandler = (e) => {
-    //
+  const searchHandler = () => {
+    let searchValue = document.getElementById('search').value;
+
+    setParams(prevState => ({...prevState, search: searchValue}));
   }
 
   const pageLength = e => {
-    //
+    e.persist();
+
+    setParams(prevState => ({...prevState, length: e.target.value}));
   }
 
   let content = items.data.length === 0 ? 
   <tr>
     <td colSpan={tableHeader.length} className="text-center">
-      <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">Barang tidak ditemukan.</span>
+      <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">User tidak ditemukan.</span>
     </td>
   </tr> :
   items.data.map((item, index) => {
     return (
       <tr key={index}>
         <td className="ps-4">
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.username}</span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.name}</span>
         </td>
         <td>
           <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.email}</span>
         </td>
         <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.role}</span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">Admin</span>
         </td>
-        <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.mobile}</span>
-        </td>
-        <td className="text-center">
+        {/* <td className="text-center">
           <Toggle
             style={{ width: '105px', height: '36px' }}
             offstyle="danger"
@@ -117,7 +100,7 @@ export default function Users() {
             on="Aktif"
             off="Nonaktif"
           />
-        </td>
+        </td> */}
         <td className="text-end pe-2">
           <Link to="/" className="badge badge-success p-3 me-1" onClick={(e) => e.preventDefault()}>
             <i className="fas fa-pen fs-5 text-white"></i>
