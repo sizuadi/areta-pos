@@ -1,7 +1,65 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'
+import { buttonStateComplete, buttonStateLoading } from '../../../Components/button.state';
+import api from '../../../Util/api';
 
 export const Create = () => {
+  const [ formInput, setFormInput ] = useState({name: ''});
+  const navigate = useNavigate();
+
+  const Toast = window['Swal'].mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', window['Swal'].stopTimer)
+      toast.addEventListener('mouseleave', window['Swal'].resumeTimer)
+    }
+  })
+
+  const handleFormSubmit = e => {
+    const abortController = new AbortController();
+    
+    e.preventDefault();
+
+    buttonStateLoading('#btn-submit');
+
+    api().post('/api/roles', formInput, {
+      signal: abortController.signal,
+    }).then(response => {
+      buttonStateComplete('#btn-submit', 'Simpan');
+      Toast.fire({
+        icon: 'success',
+        title: response.data.message,
+      });
+
+      navigate('/manajemen-akses/roles', {replace: true});
+    }).catch(err => {
+      window['toastr'].clear();
+
+      if (err.response.status === 422) {
+        buttonStateComplete('#btn-submit', 'Simpan');
+        let error = Object.keys(err.response.data.errors);
+
+        error.map(key => {
+          return window['toastr'].error(err.response.data.errors[key][0]);
+        });
+      } else {
+        buttonStateComplete('#btn-submit', 'Simpan');
+        window['toastr'].error(err.response.data.message);
+      }
+    })
+  }
+
+  const handleFormUpdate = e => {
+    e.persist();
+
+    setFormInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
+  }
+  
   return (
     <>
     <div className='toolbar' id='kt_toolbar'>
@@ -26,10 +84,10 @@ export const Create = () => {
                   <div className="row">
                     <div className="col-md-12 mb-10">
                       <label className="required form-label">Nama Role</label>
-                      <input type="text" className="form-control" autoComplete="off" />
+                      <input type="text" className="form-control" autoComplete="off" name="name" onChange={handleFormUpdate} />
                     </div>
                   </div>
-                  <button type="submit" className="btn btn-success">Simpan</button>{" "}
+                  <button onClick={handleFormSubmit} className="btn btn-success" id="btn-submit">Simpan</button>{" "}
                   <Link to="/manajemen-akses/roles" className="btn btn-warning">Kembali</Link>
                 </form>
               </div>

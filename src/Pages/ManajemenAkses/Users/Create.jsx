@@ -1,12 +1,36 @@
-import React from 'react'
+
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { buttonStateComplete, buttonStateLoading } from '../../../Components/button.state';
 import api from '../../../Util/api';
 
 export const Create = () => {
-  const [ formInput, setFormInput ] = useState({name: '', email: '', role: '', password: ''});
+  const [formInput, setFormInput] = useState({name: '', email: '', role: '', password: ''});
+  const [loading, setloading] = useState(true);
+  const [roles, setRoles] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setloading(true);
+
+    const abortController = new AbortController();
+
+    api().get(`api/roles`, {
+      params: {
+        length: 100,
+        page: 1,
+      },
+      signal: abortController.signal,
+    }).then(response => {
+      setloading(false);
+      setRoles(response.data.data.data);
+    });
+
+    return () => {
+      abortController.abort();
+    }
+  }, []);
 
   const Toast = window['Swal'].mixin({
     toast: true,
@@ -38,27 +62,35 @@ export const Create = () => {
 
       navigate('/manajemen-akses/users', {replace: true});
     }).catch(err => {
-      if (err.response.status === 422) {          
+      
+      window['toastr'].clear();
+
+      if (err.response.status === 422) {
         buttonStateComplete('#btn-submit', 'Simpan');
-        Toast.fire({
-          icon: 'error',
-          title: err.response.data.errors[Object.keys(err.response.data.errors)[0]],
+        let error = Object.keys(err.response.data.errors);
+
+        error.map(key => {
+          return window['toastr'].error(err.response.data.errors[key][0]);
         });
       } else {
         buttonStateComplete('#btn-submit', 'Simpan');
-        Toast.fire({
-          icon: 'error',
-          title: err.response.data.message,
-        });
+        window['toastr'].error(err.response.data.message);
       }
     })
   }
+
+  const options = !loading && roles.map((role, index) => {
+    return (
+      <option value={role.id} key={index}>{role.name}</option>
+    )
+  })
 
   const handleFormUpdate = e => {
     e.persist();
 
     setFormInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   }
+  
   return (
     <>
     <div className='toolbar' id='kt_toolbar'>
@@ -90,15 +122,14 @@ export const Create = () => {
                   </div>
                   <div className="col-md-6 mb-10">
                     <label className="required form-label">Role</label>
-                    <select className="form-select" name="role" onChangeCapture={handleFormUpdate}>
-                      <option value="Admin">Admin</option>
-                      <option value="User">User</option>
+                    <select className="form-select" name="role" onChangeCapture={handleFormUpdate} disabled={loading}>
+                      {!loading && options}
                     </select>
                   </div>
                   <div className="col-md-6 mb-10">
                     <label className="form-label">Password</label>
                     <input type="password" className="form-control" autoComplete="off" name="password" onChange={handleFormUpdate} />
-                    <div class="form-text">Biarkan kosong jika ingin menggunakan password bawaan (12345678).</div>
+                    <div className="form-text">Biarkan kosong jika ingin menggunakan password bawaan (12345678).</div>
                   </div>
                 </div>
                 <button onClick={handleFormSubmit} className="btn btn-success" id="btn-submit">Simpan</button>{" "}
