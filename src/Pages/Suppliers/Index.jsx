@@ -1,43 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Toggle from 'react-bootstrap-toggle';
 
+import { useSanctum } from 'react-sanctum';
+import Toggle from 'react-bootstrap-toggle';
+import api from '../../Util/api';
 import Table from '../../Components/PageComponent/Table';
 import TablePagination from '../../Components/PageComponent/TablePagination';
-import { dummyBlueprint } from '../../Components/pagination.blueprint';
+import { defaultBlueprint } from '../../Components/pagination.blueprint';
+import { deleteHandler } from '../../Components/deleteHandler';
 
 export default function Suppliers() {
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [items, setItems] = useState(dummyBlueprint);
+  const {signOut} = useSanctum()
   const [toggle, setToggle] = useState(true);
-
-  const dummyData = [
-    {
-      "id": 1,
-      "supplier_name": "Smith & co.",
-      "email": "example@mail.com",
-      "telephone": "+62 1827312",
-      "created_at": "2021-10-27T15:06:52.000000Z",
-      "updated_at": "2021-10-27T15:06:52.000000Z",
-    },
-    {
-      "id": 2,
-      "supplier_name": "Campina",
-      "email": "example@mail.com", 
-      "telephone": "+62 1827312",
-      "created_at": "2021-10-27T15:07:12.000000Z",
-      "updated_at": "2021-10-27T15:07:12.000000Z",
-    },
-    {
-      "id": 3,
-      "supplier_name": "Wings Food",
-      "email": "example@mail.com", 
-      "telephone": "+62 1827312",
-      "created_at": "2021-10-27T15:07:12.000000Z",
-      "updated_at": "2021-10-27T15:07:12.000000Z",
-    },
-  ]
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paginated, setPaginated] = useState(defaultBlueprint);
+  const [params, setParams] = useState({search: '', length: 5});
   
   const tableHeader = [
     {
@@ -53,57 +31,75 @@ export default function Suppliers() {
       className: ""
     },
     {
+      title: "Address",
+      className: ""
+    },
+    {
       title: "Status",
       className: "text-center"
     },
     {
-      title: "",
-      className: "min-w-200px text-end rounded-end",
+      title: "Action",
+      className: "min-w-200px pe-4 text-end rounded-end",
     },
   ]
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setItems(prev => ({
-        ...prev,
-        to: 3,
-        total: 3,
-        data: dummyData,
-      }));
+  useEffect(() => {    
+    setIsLoading(true);
 
-      setLoading(false);
-    }, 500);
+    const abortController = new AbortController();
+
+    api().get(`/api/suppliers?page=${currentPage}`, {
+      signal: abortController.signal,
+      params: params,
+    }).then(response => {
+      console.log(response.data.data);
+      setPaginated(response.data.data);
+      setIsLoading(false);
+    }).catch(err => {
+      if (err.response?.status === 401) {
+        signOut();
+      }
+    });
 
     return () => {
-      clearTimeout(timer);
-    }
-  });
+      abortController.abort();
+    };
+  }, [currentPage, signOut, params]);
   
   const searchHandler = (e) => {
-    //
+    let searchValue = document.getElementById('search').value;
+    
+    setCurrentPage(1);
+    setParams(prevState => ({...prevState, search: searchValue}));
   }
 
   const pageLength = e => {
-    //
+    e.persist();
+
+    setParams(prevState => ({...prevState, length: e.target.value}));
   }
 
-  let content = items.data.length === 0 ? 
+  let suppliers = paginated.length === 0 ? 
   <tr>
     <td colSpan={tableHeader.length} className="text-center">
       <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">Barang tidak ditemukan.</span>
     </td>
   </tr> :
-  items.data.map((item, index) => {
+  paginated.data.map((item, index) => {
     return (
       <tr key={index}>
         <td className="ps-4">
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.supplier_name}</span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.name}</span>
         </td>
         <td>
           <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.email}</span>
         </td>
         <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.telephone}</span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.phone_number}</span>
+        </td>
+        <td>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.address}</span>
         </td>
         <td className="text-center">
           <Toggle
@@ -118,10 +114,13 @@ export default function Suppliers() {
           />
         </td>
         <td className="text-end pe-2">
-          <Link to="/" className="badge badge-success p-3 me-1" onClick={(e) => e.preventDefault()}>
+          <Link to={`/supplier/data-supplier/edit/${item.id}`} className="badge badge-success p-3 me-1">
             <i className="fas fa-pen fs-5 text-white"></i>
           </Link>
-          <Link to="/" className="badge badge-danger p-3" onClick={(e) => e.preventDefault()}>
+          <Link to="/" className="badge badge-danger p-3" onClick={(e) => {
+            e.preventDefault();
+            deleteHandler(item.id, setCurrentPage, 'suppliers');
+          }}>
             <i className="fas fa-trash fs-5 text-white"></i>
           </Link>
         </td>
@@ -168,13 +167,13 @@ export default function Suppliers() {
               <div className="row">
                 <div className="col-12 mt-4">
                   <div className="table-responsive">
-                    <Table loadingState={loading} tableHeader={tableHeader} tableBody={content} />
+                    <Table loadingState={isLoading} tableHeader={tableHeader} tableBody={suppliers} />
                   </div>
                   <TablePagination
-                    loadingState={loading}
-                    paginationApi={items}
+                    loadingState={isLoading}
+                    paginationApi={paginated}
                     currentPage={currentPage}
-                    loadingSetter={setLoading}
+                    loadingSetter={setIsLoading}
                     currentPageSetter={setCurrentPage}
                     pageLengthSetter={pageLength}
                   />
