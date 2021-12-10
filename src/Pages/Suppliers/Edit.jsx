@@ -31,6 +31,8 @@ export const Edit = () => {
         phone_number: supplierData.phone_number,
         address: supplierData.address,
       });
+
+      setloading(false);
     })
 
     return () => {
@@ -113,19 +115,19 @@ export const Edit = () => {
               <div className="row">
                     <div className="col-md-12 mb-10">
                       <label className="required form-label">Nama Supplier</label>
-                      <input type="text" className="form-control" autoComplete="off" name="name" onChange={handleFormUpdate} defaultValue={supplierData.name} />
+                      <input type="text" className="form-control" autoComplete="off" name="name" onChange={handleFormUpdate} defaultValue={supplierData.name} disabled={loading} />
                     </div>
                     <div className="col-md-6 mb-10">
                       <label className="required form-label">Email</label>
-                      <input type="email" className="form-control" autoComplete="off" name="email" onChange={handleFormUpdate} defaultValue={supplierData.email} />
+                      <input type="email" className="form-control" autoComplete="off" name="email" onChange={handleFormUpdate} defaultValue={supplierData.email} disabled={loading}/>
                     </div>
                     <div className="col-md-6 mb-10">
                       <label className="required form-label">Phone Number</label>
-                      <input type="text" className="form-control" autoComplete="off" name="phone_number" onChange={handleFormUpdate} defaultValue={supplierData.phone_number} />
+                      <input type="text" className="form-control" autoComplete="off" name="phone_number" onChange={handleFormUpdate} defaultValue={supplierData.phone_number} disabled={loading} />
                     </div>
                     <div className="col-md-12 mb-10">
                       <label className="form-label">Address</label>
-                        <textarea className="form-control" name="address" rows="3" onChange={handleFormUpdate} defaultValue={supplierData.address} ></textarea>
+                        <textarea className="form-control" name="address" rows="3" onChange={handleFormUpdate} defaultValue={supplierData.address} disabled={loading} ></textarea>
                       </div>
                   </div>
                 <button onClick={handleFormSubmit} className="btn btn-success" id="btn-submit">Simpan</button>{" "}
