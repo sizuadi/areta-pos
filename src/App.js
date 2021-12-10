@@ -43,6 +43,7 @@ import NotFound from "./Pages/Errors/NotFound";
 import Blank from "./Pages/Blank";
 
 import { authorized, guest } from "./Util/authHelper";
+import { Edit } from "./Pages/ManajemenAkses/Users/Edit";
 
 function App() {
   const { authenticated } = useSanctum();
@@ -89,6 +90,7 @@ function App() {
         <Route path="manajemen-akses">
           <Route path="users" element={authorized(<Admin component={<Users />} />, authenticated)}/>
           <Route path="users/create" element={authorized(<Admin component={<CreateUsers />} />, authenticated)}/>
+          <Route path="users/edit/:userId" element={authorized(<Admin component={<Edit />} />, authenticated)}/>
           <Route path="roles" element={authorized(<Admin component={<Roles />} />, authenticated)}/>
           <Route path="roles/create" element={authorized(<Admin component={<CreateRoles />} />, authenticated)}/>
           <Route path="permissions" element={authorized(<Admin component={<Permissions />} />, authenticated)}/>

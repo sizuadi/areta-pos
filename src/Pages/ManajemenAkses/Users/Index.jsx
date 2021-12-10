@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-// import Toggle from 'react-bootstrap-toggle';
 
 import Table from '../../../Components/PageComponent/Table';
 import TablePagination from '../../../Components/PageComponent/TablePagination';
 import { defaultBlueprint } from '../../../Components/pagination.blueprint';
 import api from '../../../Util/api';
 import { useSanctum } from 'react-sanctum';
+import { deleteHandler } from '../../../Components/deleteHandler';
 
 export default function Users() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState(defaultBlueprint);
-  const { signOut } = useSanctum();
   const [params, setParams] = useState({length: 5, search: ""});
+  const { signOut } = useSanctum();
   
   const tableHeader = [
     {
@@ -28,10 +28,6 @@ export default function Users() {
       title: "Role",
       className: ""
     },
-    // {
-    //   title: "Status",
-    //   className: "text-center"
-    // },
     {
       title: "",
       className: "min-w-200px text-end rounded-end",
@@ -41,8 +37,7 @@ export default function Users() {
   useEffect(() => {
     setLoading(true);
     const abortController = new AbortController();
-
-    api().get(`api/users?page=${currentPage}`, {
+    api().get(`api/users?page=${currentPage}&relations=roles`, {
       params: params,
       signal: abortController.signal,
     }).then(response => {
@@ -87,25 +82,18 @@ export default function Users() {
           <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.email}</span>
         </td>
         <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">Admin</span>
+          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{
+            item.roles[0].name
+          }</span>
         </td>
-        {/* <td className="text-center">
-          <Toggle
-            style={{ width: '105px', height: '36px' }}
-            offstyle="danger"
-            onClick={() => setToggle(!toggle)}
-            size="sm"
-            handlestyle="light"
-            active={toggle}
-            on="Aktif"
-            off="Nonaktif"
-          />
-        </td> */}
         <td className="text-end pe-2">
-          <Link to="/" className="badge badge-success p-3 me-1" onClick={(e) => e.preventDefault()}>
+          <Link to={`/manajemen-akses/users/edit/${item.id}`} className="badge badge-success p-3 me-1">
             <i className="fas fa-pen fs-5 text-white"></i>
           </Link>
-          <Link to="/" className="badge badge-danger p-3" onClick={(e) => e.preventDefault()}>
+          <Link to="/" className="badge badge-danger p-3" onClick={(e) => {
+            e.preventDefault();
+            deleteHandler(item.id, setCurrentPage, 'users');
+          }}>
             <i className="fas fa-trash fs-5 text-white"></i>
           </Link>
         </td>

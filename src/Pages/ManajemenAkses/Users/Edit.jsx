@@ -1,14 +1,15 @@
-
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { buttonStateComplete, buttonStateLoading } from '../../../Components/button.state';
 import api from '../../../Util/api';
 
-export const Create = () => {
+export const Edit = () => {
   const [formInput, setFormInput] = useState({name: '', email: '', role: '', password: ''});
+  const [userData, setUserData] = useState({name: '', email: '', role: ''});
   const [loading, setloading] = useState(true);
   const [roles, setRoles] = useState([]);
+  const urlParams = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,10 +28,27 @@ export const Create = () => {
       setRoles(response.data.data.data);
     });
 
+    api().get(`api/users/${urlParams.userId}?relations=roles`).then(response => {
+      const userData = response.data;
+      
+      setUserData({
+        name: userData.name,
+        email: userData.email,
+        role: userData.roles[0].id,
+      })
+
+      setFormInput({
+        name: userData.name,
+        email: userData.email,
+        role: userData.roles[0].id,
+        password: '',
+      });
+    })
+
     return () => {
       abortController.abort();
     }
-  }, []);
+  }, [urlParams]);
 
   const Toast = window['Swal'].mixin({
     toast: true,
@@ -51,7 +69,7 @@ export const Create = () => {
 
     buttonStateLoading('#btn-submit');
 
-    api().post('/api/users', formInput, {
+    api().put(`/api/users/${urlParams.userId}`, formInput, {
       signal: abortController.signal,
     }).then(response => {
       buttonStateComplete('#btn-submit', 'Simpan');
@@ -62,7 +80,6 @@ export const Create = () => {
 
       navigate('/manajemen-akses/users', {replace: true});
     }).catch(err => {
-      
       window['toastr'].clear();
 
       if (err.response.status === 422) {
@@ -81,7 +98,7 @@ export const Create = () => {
 
   const options = !loading && roles.map((role, index) => {
     return (
-      <option value={role.id} key={index}>{role.name}</option>
+      <option value={role.id} key={index} selected={role.id === userData.role}>{role.name}</option>
     )
   })
 
@@ -90,7 +107,7 @@ export const Create = () => {
 
     setFormInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
   }
-  
+
   return (
     <>
     <div className='toolbar' id='kt_toolbar'>
@@ -98,7 +115,7 @@ export const Create = () => {
         <div data-kt-swapper='true' data-kt-swapper-mode='prepend' data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" className='page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0'>
           <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Users</h1>
           <span className='h-20px border-gray-200 border-start ms-3 mx-2' />
-          <small className='text-muted fs-7 fw-bold my-1 ms-1'>Tambah</small>
+          <small className='text-muted fs-7 fw-bold my-1 ms-1'>Edit</small>
         </div>
       </div>
     </div>
@@ -106,7 +123,7 @@ export const Create = () => {
       <div id="kt_content_container" className="container-fluid">
         <div className="card shadow-sm">
           <div className="card-header">
-            <h3 className="card-title">Tambah User</h3>
+            <h3 className="card-title">Edit User</h3>
           </div>
           <div className="card-body">
             <div className="row">
@@ -114,11 +131,11 @@ export const Create = () => {
                 <div className="row">
                   <div className="col-md-6 mb-10">
                     <label className="required form-label">Full Name</label>
-                    <input type="text" className="form-control" autoComplete="off" name="name" onChange={handleFormUpdate} />
+                    <input type="text" className="form-control" autoComplete="off" name="name" onChange={handleFormUpdate} defaultValue={userData.name} />
                   </div>
                   <div className="col-md-6 mb-10">
                     <label className="required form-label">Email</label>
-                    <input type="email" className="form-control" autoComplete="off" name="email" onChange={handleFormUpdate} />
+                    <input type="email" className="form-control" autoComplete="off" name="email" onChange={handleFormUpdate} defaultValue={userData.email} />
                   </div>
                   <div className="col-md-6 mb-10">
                     <label className="required form-label">Role</label>
@@ -129,7 +146,7 @@ export const Create = () => {
                   <div className="col-md-6 mb-10">
                     <label className="form-label">Password</label>
                     <input type="password" className="form-control" autoComplete="off" name="password" onChange={handleFormUpdate} />
-                    <div className="form-text">Biarkan kosong jika ingin menggunakan password bawaan (12345678).</div>
+                    <div className="form-text">Biarkan kosong jika tidak ingin mengubah password.</div>
                   </div>
                 </div>
                 <button onClick={handleFormSubmit} className="btn btn-success" id="btn-submit">Simpan</button>{" "}
