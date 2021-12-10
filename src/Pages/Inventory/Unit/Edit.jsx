@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { buttonStateComplete, buttonStateLoading } from '../../Components/button.state';
-import api from '../../Util/api';
+import { buttonStateComplete, buttonStateLoading } from '../../../Components/button.state';
+import api from '../../../Util/api';
 
 export const Edit = () => {
-  const [formInput, setFormInput] = useState({name: '', email: '', phone_number: '', address: ''});
-  const [supplierData, setSupplierData] = useState({name: '', email: '', phone_number: '', address: ''});
+  const [formInput, setFormInput] = useState({name: ''});
+  const [supplierData, setSupplierData] = useState({name: ''});
   const [loading, setloading] = useState(true);
   const urlParams = useParams();
   const navigate = useNavigate();
@@ -16,20 +16,14 @@ export const Edit = () => {
 
     const abortController = new AbortController();
 
-    api().get(`api/suppliers/${urlParams.supplierId}`).then(response => {
+    api().get(`api/units/${urlParams.unitId}`).then(response => {
       const supplierData = response.data;
       setSupplierData({
         name: supplierData.name,
-        email: supplierData.email,
-        phone_number: supplierData.phone_number,
-        address: supplierData.address,
       })
 
       setFormInput({
         name: supplierData.name,
-        email: supplierData.email,
-        phone_number: supplierData.phone_number,
-        address: supplierData.address,
       });
 
       setloading(false);
@@ -59,7 +53,7 @@ export const Edit = () => {
 
     buttonStateLoading('#btn-submit');
 
-    api().put(`/api/suppliers/${urlParams.supplierId}`, formInput, {
+    api().put(`/api/units/${urlParams.unitId}`, formInput, {
       signal: abortController.signal,
     }).then(response => {
       buttonStateComplete('#btn-submit', 'Simpan');
@@ -68,7 +62,7 @@ export const Edit = () => {
         title: response.data.message,
       });
 
-      navigate('/supplier/data-supplier', {replace: true});
+      navigate('/inventory/unit', {replace: true});
     }).catch(err => {
       window['toastr'].clear();
 
@@ -107,31 +101,19 @@ export const Edit = () => {
       <div id="kt_content_container" className="container-fluid">
         <div className="card shadow-sm">
           <div className="card-header">
-            <h3 className="card-title">Edit Supplier</h3>
+            <h3 className="card-title">Edit Unit</h3>
           </div>
           <div className="card-body">
             <div className="row">
               <div className="col-12">
               <div className="row">
                     <div className="col-md-12 mb-10">
-                      <label className="required form-label">Nama Supplier</label>
+                      <label className="required form-label">Nama Unit</label>
                       <input type="text" className="form-control" autoComplete="off" name="name" onChange={handleFormUpdate} defaultValue={supplierData.name} disabled={loading} />
                     </div>
-                    <div className="col-md-6 mb-10">
-                      <label className="required form-label">Email</label>
-                      <input type="email" className="form-control" autoComplete="off" name="email" onChange={handleFormUpdate} defaultValue={supplierData.email} disabled={loading}/>
-                    </div>
-                    <div className="col-md-6 mb-10">
-                      <label className="required form-label">Phone Number</label>
-                      <input type="text" className="form-control" autoComplete="off" name="phone_number" onChange={handleFormUpdate} defaultValue={supplierData.phone_number} disabled={loading} />
-                    </div>
-                    <div className="col-md-12 mb-10">
-                      <label className="form-label">Address</label>
-                        <textarea className="form-control" name="address" rows="3" onChange={handleFormUpdate} defaultValue={supplierData.address} disabled={loading} ></textarea>
-                      </div>
                   </div>
                 <button onClick={handleFormSubmit} className="btn btn-success" id="btn-submit">Simpan</button>{" "}
-                <Link to="/supplier/data-supplier" className="btn btn-warning">Kembali</Link>
+                <Link to="/inventory/unit" className="btn btn-warning">Kembali</Link>
               </div>
             </div>
           </div>

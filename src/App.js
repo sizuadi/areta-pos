@@ -21,6 +21,9 @@ import Konversi from "./Pages/Inventory/Konversi/Index";
 import { Create as CreateKonversi } from "./Pages/Inventory/Konversi/Create";
 import StockOpname from "./Pages/Inventory/StockOpname/Index";
 import { Create as CreateStockOpname } from "./Pages/Inventory/StockOpname/Create";
+import Unit from "./Pages/Inventory/Unit/Index";
+import { Create as CreateUnit } from "./Pages/Inventory/Unit/Create";
+import { Edit as EditUnit } from "./Pages/Inventory/Unit/Edit";
 import HargaBeli from "./Pages/Harga/HargaBeli/Index";
 import { Create as CreateHargaBeli } from "./Pages/Harga/HargaBeli/Create";
 import HargaJual from "./Pages/Harga/HargaJual/Index";
@@ -71,6 +74,9 @@ function App() {
           <Route path="konversi/create" element={authorized(<Admin component={<CreateKonversi />} />, authenticated)}/>
           <Route path="stock-opname" element={authorized(<Admin component={<StockOpname />} />, authenticated)}/>
           <Route path="stock-opname/create" element={authorized(<Admin component={<CreateStockOpname />} />, authenticated)}/>
+          <Route path="unit" element={authorized(<Admin component={<Unit />} />, authenticated)}/>
+          <Route path="unit/create" element={authorized(<Admin component={<CreateUnit />} />, authenticated)}/>
+          <Route path="unit/edit/:unitId" element={authorized(<Admin component={<EditUnit />} />, authenticated)}/>
         </Route>
         <Route path="harga">
           <Route path="harga-beli" element={authorized(<Admin component={<HargaBeli />} />, authenticated)}/>
