@@ -29,6 +29,7 @@ import Margin from "./Pages/Harga/Margin/Index";
 import { Create as CreateMargin } from "./Pages/Harga/Margin/Create";
 import Suppliers from "./Pages/Suppliers/Index";
 import { Create as CreateSupplier } from "./Pages/Suppliers/Create";
+import { Edit as EditSupplier } from "./Pages/Suppliers/Edit";
 import PermintaanBarang from "./Pages/Suppliers/PermintaanBarang/Index";
 import { Create as CreatePermintaanBarang } from "./Pages/Suppliers/PermintaanBarang/Create";
 import ReturBarang from "./Pages/Suppliers/ReturBarang/Index";
@@ -82,6 +83,7 @@ function App() {
         <Route path="supplier">
           <Route path="data-supplier" element={authorized(<Admin component={<Suppliers />} />, authenticated)}/>
           <Route path="data-supplier/create" element={authorized(<Admin component={<CreateSupplier />} />, authenticated)}/>
+          <Route path="data-supplier/edit/:supplierId" element={authorized(<Admin component={<EditSupplier />} />, authenticated)}/>
           <Route path="permintaan-barang" element={authorized(<Admin component={<PermintaanBarang />} />, authenticated)}/>
           <Route path="permintaan-barang/create" element={authorized(<Admin component={<CreatePermintaanBarang />} />, authenticated)}/>
           <Route path="retur-barang" element={authorized(<Admin component={<ReturBarang />} />, authenticated)}/>
