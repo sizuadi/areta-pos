@@ -24,7 +24,6 @@ export const Edit = () => {
       },
       signal: abortController.signal,
     }).then(response => {
-      setloading(false);
       setRoles(response.data.data.data);
     });
 
@@ -43,7 +42,9 @@ export const Edit = () => {
         role: userData.roles[0].id,
         password: '',
       });
-    })
+
+      setloading(false);
+    });
 
     return () => {
       abortController.abort();
@@ -98,7 +99,7 @@ export const Edit = () => {
 
   const options = !loading && roles.map((role, index) => {
     return (
-      <option value={role.id} key={index} selected={role.id === userData.role}>{role.name}</option>
+      <option value={role.id} key={index}>{role.name}</option>
     )
   })
 
@@ -131,21 +132,21 @@ export const Edit = () => {
                 <div className="row">
                   <div className="col-md-6 mb-10">
                     <label className="required form-label">Full Name</label>
-                    <input type="text" className="form-control" autoComplete="off" name="name" onChange={handleFormUpdate} defaultValue={userData.name} />
+                    <input type="text" className="form-control" autoComplete="off" name="name" onChange={handleFormUpdate} defaultValue={userData.name} disabled={loading} />
                   </div>
                   <div className="col-md-6 mb-10">
                     <label className="required form-label">Email</label>
-                    <input type="email" className="form-control" autoComplete="off" name="email" onChange={handleFormUpdate} defaultValue={userData.email} />
+                    <input type="email" className="form-control" autoComplete="off" name="email" onChange={handleFormUpdate} defaultValue={userData.email} disabled={loading} />
                   </div>
                   <div className="col-md-6 mb-10">
                     <label className="required form-label">Role</label>
-                    <select className="form-select" name="role" onChangeCapture={handleFormUpdate} disabled={loading}>
+                    <select className="form-select" name="role" onChangeCapture={handleFormUpdate} disabled={loading} defaultValue={userData.role}>
                       {!loading && options}
                     </select>
                   </div>
                   <div className="col-md-6 mb-10">
                     <label className="form-label">Password</label>
-                    <input type="password" className="form-control" autoComplete="off" name="password" onChange={handleFormUpdate} />
+                    <input type="password" className="form-control" autoComplete="off" name="password" onChange={handleFormUpdate} disabled={loading} />
                     <div className="form-text">Biarkan kosong jika tidak ingin mengubah password.</div>
                   </div>
                 </div>
