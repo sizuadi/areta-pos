@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 
+import 'react-toastify/dist/ReactToastify.css';
 import { initApp } from "../Util/themeInit";
 import ContentWrapper from "./Partials/ContentWrapper";
 import Footer from "./Partials/Footer";
@@ -29,6 +31,15 @@ export default function Admin({ component }) {
           </svg>
         </span>
       </div>
+      <ToastContainer 
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }
