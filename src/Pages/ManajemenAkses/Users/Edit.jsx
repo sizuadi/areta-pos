@@ -1,40 +1,26 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import Select from 'react-select';
+import { toast } from 'react-toastify';
+
 import { buttonStateComplete, buttonStateLoading } from '../../../Components/button.state';
 import api from '../../../Util/api';
 
 export const Edit = () => {
   const [formInput, setFormInput] = useState({name: '', email: '', role: '', password: ''});
-  const [userData, setUserData] = useState({name: '', email: '', role: ''});
-  const [loading, setloading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [roles, setRoles] = useState([]);
   const urlParams = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    setloading(true);
+    setLoading(true);
 
     const abortController = new AbortController();
 
-    api().get(`api/roles`, {
-      params: {
-        length: 100,
-        page: 1,
-      },
-      signal: abortController.signal,
-    }).then(response => {
-      setRoles(response.data.data.data);
-    });
-
     api().get(`api/users/${urlParams.userId}?relations=roles`).then(response => {
       const userData = response.data;
-      
-      setUserData({
-        name: userData.name,
-        email: userData.email,
-        role: userData.roles[0].id,
-      })
 
       setFormInput({
         name: userData.name,
@@ -43,7 +29,13 @@ export const Edit = () => {
         password: '',
       });
 
-      setloading(false);
+      api().get(`api/roles`, {
+        params: { no_paginate: true },
+        signal: abortController.signal,
+      }).then(response => {
+        setRoles(response.data.data);
+        setLoading(false);
+      });
     });
 
     return () => {
@@ -51,17 +43,12 @@ export const Edit = () => {
     }
   }, [urlParams]);
 
-  const Toast = window['Swal'].mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 4000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener('mouseenter', window['Swal'].stopTimer)
-      toast.addEventListener('mouseleave', window['Swal'].resumeTimer)
+  const options = roles.map(item => {
+    return {
+      label: item.name,
+      value: item.id
     }
-  })
+  });
 
   const handleFormSubmit = e => {
     const abortController = new AbortController();
@@ -74,40 +61,29 @@ export const Edit = () => {
       signal: abortController.signal,
     }).then(response => {
       buttonStateComplete('#btn-submit', 'Simpan');
-      Toast.fire({
-        icon: 'success',
-        title: response.data.message,
-      });
+      toast.success(response.data.message);
 
-      navigate('/manajemen-akses/users', {replace: true});
+      navigate("/manajemen-akses/users", { replace: true });
     }).catch(err => {
-      window['toastr'].clear();
-
       if (err.response.status === 422) {
         buttonStateComplete('#btn-submit', 'Simpan');
         let error = Object.keys(err.response.data.errors);
 
-        error.map(key => {
-          return window['toastr'].error(err.response.data.errors[key][0]);
-        });
+        error.map(key => toast.error(err.response.data.errors[key][0]));
       } else {
         buttonStateComplete('#btn-submit', 'Simpan');
-        window['toastr'].error(err.response.data.message);
+        toast.error(err.response.data.message);
       }
     })
   }
-
-  const options = !loading && roles.map((role, index) => {
-    return (
-      <option value={role.id} key={index}>{role.name}</option>
-    )
-  })
 
   const handleFormUpdate = e => {
     e.persist();
 
     setFormInput(prevState => ({...prevState, [e.target.name]: e.target.value}));
-  }
+  };
+
+  const handleSelect = e => setFormInput(prevState => ({...prevState, role: e.value}));
 
   return (
     <>
@@ -131,21 +107,19 @@ export const Edit = () => {
               <div className="col-12">
                 <div className="row">
                   <div className="col-md-6 mb-10">
-                    <label className="required form-label">Full Name</label>
-                    <input type="text" className="form-control" autoComplete="off" name="name" onChange={handleFormUpdate} defaultValue={userData.name} disabled={loading} />
+                    <label className="required form-label" htmlFor="name">Full Name</label>
+                    <input type="text" className="form-control" autoComplete="off" name="name" onChange={handleFormUpdate} defaultValue={formInput.name} disabled={loading} />
                   </div>
                   <div className="col-md-6 mb-10">
-                    <label className="required form-label">Email</label>
-                    <input type="email" className="form-control" autoComplete="off" name="email" onChange={handleFormUpdate} defaultValue={userData.email} disabled={loading} />
+                    <label className="required form-label" htmlFor="email">Email</label>
+                    <input type="email" className="form-control" autoComplete="off" name="email" onChange={handleFormUpdate} defaultValue={formInput.email} disabled={loading} />
                   </div>
                   <div className="col-md-6 mb-10">
-                    <label className="required form-label">Role</label>
-                    <select className="form-select" name="role" onChangeCapture={handleFormUpdate} disabled={loading} defaultValue={userData.role}>
-                      {!loading && options}
-                    </select>
+                    <label className="required form-label" htmlFor="role">Role</label>
+                      <Select className="form-control p-1" name="role" onChange={handleSelect} isDisabled={loading} options={options} />
                   </div>
                   <div className="col-md-6 mb-10">
-                    <label className="form-label">Password</label>
+                    <label className="form-label" htmlFor="password">Password</label>
                     <input type="password" className="form-control" autoComplete="off" name="password" onChange={handleFormUpdate} disabled={loading} />
                     <div className="form-text">Biarkan kosong jika tidak ingin mengubah password.</div>
                   </div>

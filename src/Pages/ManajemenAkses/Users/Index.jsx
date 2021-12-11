@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSanctum } from 'react-sanctum';
 
 import Table from '../../../Components/PageComponent/Table';
 import TablePagination from '../../../Components/PageComponent/TablePagination';
 import { defaultBlueprint } from '../../../Components/pagination.blueprint';
 import api from '../../../Util/api';
-import { useSanctum } from 'react-sanctum';
 import { deleteHandler } from '../../../Components/deleteHandler';
 
 export default function Users() {
@@ -92,6 +92,7 @@ export default function Users() {
           </Link>
           <Link to="/" className="badge badge-danger p-3" onClick={(e) => {
             e.preventDefault();
+            e.target.classList.add('disabled');
             deleteHandler(item.id, setCurrentPage, 'users');
           }}>
             <i className="fas fa-trash fs-5 text-white"></i>
