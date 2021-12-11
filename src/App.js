@@ -21,6 +21,9 @@ import Konversi from "./Pages/Inventory/Konversi/Index";
 import { Create as CreateKonversi } from "./Pages/Inventory/Konversi/Create";
 import StockOpname from "./Pages/Inventory/StockOpname/Index";
 import { Create as CreateStockOpname } from "./Pages/Inventory/StockOpname/Create";
+import Unit from "./Pages/Inventory/Unit/Index";
+import { Create as CreateUnit } from "./Pages/Inventory/Unit/Create";
+import { Edit as EditUnit } from "./Pages/Inventory/Unit/Edit";
 import HargaBeli from "./Pages/Harga/HargaBeli/Index";
 import { Create as CreateHargaBeli } from "./Pages/Harga/HargaBeli/Create";
 import HargaJual from "./Pages/Harga/HargaJual/Index";
@@ -29,6 +32,7 @@ import Margin from "./Pages/Harga/Margin/Index";
 import { Create as CreateMargin } from "./Pages/Harga/Margin/Create";
 import Suppliers from "./Pages/Suppliers/Index";
 import { Create as CreateSupplier } from "./Pages/Suppliers/Create";
+import { Edit as EditSupplier } from "./Pages/Suppliers/Edit";
 import PermintaanBarang from "./Pages/Suppliers/PermintaanBarang/Index";
 import { Create as CreatePermintaanBarang } from "./Pages/Suppliers/PermintaanBarang/Create";
 import ReturBarang from "./Pages/Suppliers/ReturBarang/Index";
@@ -70,6 +74,9 @@ function App() {
           <Route path="konversi/create" element={authorized(<Admin component={<CreateKonversi />} />, authenticated)}/>
           <Route path="stock-opname" element={authorized(<Admin component={<StockOpname />} />, authenticated)}/>
           <Route path="stock-opname/create" element={authorized(<Admin component={<CreateStockOpname />} />, authenticated)}/>
+          <Route path="unit" element={authorized(<Admin component={<Unit />} />, authenticated)}/>
+          <Route path="unit/create" element={authorized(<Admin component={<CreateUnit />} />, authenticated)}/>
+          <Route path="unit/edit/:unitId" element={authorized(<Admin component={<EditUnit />} />, authenticated)}/>
         </Route>
         <Route path="harga">
           <Route path="harga-beli" element={authorized(<Admin component={<HargaBeli />} />, authenticated)}/>
@@ -82,6 +89,7 @@ function App() {
         <Route path="supplier">
           <Route path="data-supplier" element={authorized(<Admin component={<Suppliers />} />, authenticated)}/>
           <Route path="data-supplier/create" element={authorized(<Admin component={<CreateSupplier />} />, authenticated)}/>
+          <Route path="data-supplier/edit/:supplierId" element={authorized(<Admin component={<EditSupplier />} />, authenticated)}/>
           <Route path="permintaan-barang" element={authorized(<Admin component={<PermintaanBarang />} />, authenticated)}/>
           <Route path="permintaan-barang/create" element={authorized(<Admin component={<CreatePermintaanBarang />} />, authenticated)}/>
           <Route path="retur-barang" element={authorized(<Admin component={<ReturBarang />} />, authenticated)}/>

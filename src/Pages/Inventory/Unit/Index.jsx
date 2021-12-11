@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useSanctum } from 'react-sanctum';
-import Toggle from 'react-bootstrap-toggle';
-import api from '../../Util/api';
-import Table from '../../Components/PageComponent/Table';
-import TablePagination from '../../Components/PageComponent/TablePagination';
-import { defaultBlueprint } from '../../Components/pagination.blueprint';
-import { deleteHandler } from '../../Components/deleteHandler';
+import api from '../../../Util/api';
+import Table from '../../../Components/PageComponent/Table';
+import TablePagination from '../../../Components/PageComponent/TablePagination';
+import { defaultBlueprint } from '../../../Components/pagination.blueprint';
+import { deleteHandler } from '../../../Components/deleteHandler';
 
 export default function Suppliers() {
-  const {signOut} = useSanctum()
-  const [toggle, setToggle] = useState(true);
+  const {signOut} = useSanctum();
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [paginated, setPaginated] = useState(defaultBlueprint);
@@ -19,24 +17,8 @@ export default function Suppliers() {
   
   const tableHeader = [
     {
-      title: "Nama Supplier",
+      title: "Nama Unit",
       className: "ps-4 rounded-start",
-    },
-    {
-      title: "Email",
-      className: "",
-    },
-    {
-      title: "Phone Number",
-      className: ""
-    },
-    {
-      title: "Address",
-      className: ""
-    },
-    {
-      title: "Status",
-      className: "text-center"
     },
     {
       title: "Action",
@@ -49,7 +31,7 @@ export default function Suppliers() {
 
     const abortController = new AbortController();
 
-    api().get(`/api/suppliers?page=${currentPage}`, {
+    api().get(`/api/units?page=${currentPage}`, {
       signal: abortController.signal,
       params: params,
     }).then(response => {
@@ -83,7 +65,7 @@ export default function Suppliers() {
   let suppliers = paginated.length === 0 ? 
   <tr>
     <td colSpan={tableHeader.length} className="text-center">
-      <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">Supplier tidak ditemukan.</span>
+      <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">Unit tidak ditemukan.</span>
     </td>
   </tr> :
   paginated.data.map((item, index) => {
@@ -92,34 +74,13 @@ export default function Suppliers() {
         <td className="ps-4">
           <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.name}</span>
         </td>
-        <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.email}</span>
-        </td>
-        <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.phone_number}</span>
-        </td>
-        <td>
-          <span className="text-dark fw-bolder text-hover-primary cursor-pointer d-block mb-1 fs-6">{item.address}</span>
-        </td>
-        <td className="text-center">
-          <Toggle
-            style={{ width: '105px', height: '36px' }}
-            offstyle="danger"
-            onClick={() => setToggle(!toggle)}
-            size="sm"
-            handlestyle="light"
-            active={toggle}
-            on="Aktif"
-            off="Nonaktif"
-          />
-        </td>
         <td className="text-end pe-2">
-          <Link to={`/supplier/data-supplier/edit/${item.id}`} className="badge badge-success p-3 me-1">
+          <Link to={`/inventory/unit/edit/${item.id}`} className="badge badge-success p-3 me-1">
             <i className="fas fa-pen fs-5 text-white"></i>
           </Link>
           <Link to="/" className="badge badge-danger p-3" onClick={(e) => {
             e.preventDefault();
-            deleteHandler(item.id, setCurrentPage, 'suppliers');
+            deleteHandler(item.id, setCurrentPage, 'units');
           }}>
             <i className="fas fa-trash fs-5 text-white"></i>
           </Link>
@@ -133,7 +94,7 @@ export default function Suppliers() {
       <div className='toolbar' id='kt_toolbar'>
         <div id='kt_toolbar_container' className='container-fluid d-flex flex-stack'>
           <div data-kt-swapper='true' data-kt-swapper-mode='prepend' data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" className='page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0'>
-            <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Data Supplier</h1>
+            <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1 py-3'>Data Unit</h1>
             <span className='h-20px border-gray-200 border-start ms-3 mx-2' />
             <small className='text-muted fs-7 fw-bold my-1 ms-1'>List Page</small>
           </div>
@@ -151,15 +112,15 @@ export default function Suppliers() {
                       <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black"></path>
                     </svg>
                   </span>
-                  <input type="text" className="form-control form-control-solid ps-10" name="search" id="search" placeholder="Nama Supplier"/>
+                  <input type="text" className="form-control form-control-solid ps-10" name="search" id="search" placeholder="Nama Unit"/>
                 </div>
                 <div className="d-flex align-items-center">
                   <button className="btn btn-light text-hover-primary me-5" onClick={searchHandler}>Cari</button>
                 </div>
               </div>
               <div className="card-toolbar">
-                <Link to="/supplier/data-supplier/create" replace={true} className="btn btn-primary">
-                  Tambah Supplier
+                <Link to="/inventory/unit/create" replace={true} className="btn btn-primary">
+                  Tambah Unit
                 </Link>
               </div>
             </div>
