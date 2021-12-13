@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import api from "../Util/api";
 
 export const deleteHandler = (id, reloader, url) => {
@@ -12,7 +13,7 @@ export const deleteHandler = (id, reloader, url) => {
   }).then((result) => {
     if (result.isConfirmed) {
       api().delete(`api/${url}/${id}`).then(response => {
-        window['toastr'].success(response.data.message);
+        toast.success(response.data.message);
         reloader(prev => ({...prev}));
       });
       window['Swal'].fire(
